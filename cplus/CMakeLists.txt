@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 enable_testing()
 
-add_subdirectory(test)
 include(FetchContent)
 FetchContent_Declare(
         googletest
@@ -17,6 +16,5 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(cplus main.cpp)
+add_executable(cplus main.cpp test/sample1.cpp)
 target_link_libraries(cplus gtest_main)
-add_test(NAME main_test COMMAND cplus)
