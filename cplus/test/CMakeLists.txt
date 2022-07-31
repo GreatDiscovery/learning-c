@@ -12,7 +12,8 @@ add_executable(
         unit_tests
         example_add.cpp
         sample1.cpp
-)
+        basic/for_test.cpp
+        basic/iterator_test.cpp basic/iterator_test.h)
 
 target_link_libraries(unit_tests
         PRIVATE
