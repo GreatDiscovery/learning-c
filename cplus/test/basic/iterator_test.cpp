@@ -142,6 +142,5 @@ namespace detail_range {
         }
         cout << endl;
     }
-
 }
 
