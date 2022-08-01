@@ -13,7 +13,7 @@ add_executable(
         example_add.cpp
         sample1.cpp
         basic/for_test.cpp
-        basic/iterator_test.cpp basic/iterator_test.h)
+        basic/iterator_test.cpp basic/iterator_test.h basic/std_function_test.cpp)
 
 target_link_libraries(unit_tests
         PRIVATE
