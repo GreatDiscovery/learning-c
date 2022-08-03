@@ -47,19 +47,20 @@ namespace std_bind {
 
     // 灵活的bind
     TEST(std_bind, case2) {
-       bind(output2, 1, 2)();
-       bind(output2, placeholders::_1, 2)(1);
-       bind(output2, 2, placeholders::_1)(1);
-       bind(output2, 1, placeholders::_2)(1, 2);
-       bind(output2, 2, placeholders::_2)(1, 2);
-       bind(output2, placeholders::_1, placeholders::_2)(1, 2);
-       bind(output2, placeholders::_2, placeholders::_1)(1, 2);
+        bind(output2, 1, 2)();
+        bind(output2, placeholders::_1, 2)(1);
+        bind(output2, 2, placeholders::_1)(1);
+        bind(output2, 1, placeholders::_2)(1, 2);
+        bind(output2, 2, placeholders::_2)(1, 2);
+        bind(output2, placeholders::_1, placeholders::_2)(1, 2);
+        bind(output2, placeholders::_2, placeholders::_1)(1, 2);
     }
 
     // std::bind + std::function
     class A {
     public:
         int i_ = 0;
+
         void output(int x, int y) {
             cout << x << " " << y << endl;
         }
@@ -67,11 +68,19 @@ namespace std_bind {
 
     TEST(std_bind, case3) {
         A a;
+        // bind(方法名， 第一个参数是对象自身， 参数1， 参数2)
         function<void(int, int)> fr = bind(&A::output, &a, placeholders::_1, placeholders::_2);
         fr(1, 2);
 
-        function<int&()> fr_i = bind(&A::i_, &a);
+        function<int &()> fr_i = bind(&A::i_, &a);
         fr_i() = 123;
+        cout << a.i_ << endl;
+    }
+
+    TEST(std_bind, case4) {
+        A a;
+        a.output(1, 2);
+        a.i_ = 3;
         cout << a.i_ << endl;
     }
 }
