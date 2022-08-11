@@ -6,15 +6,7 @@
 #include <gtest/gtest.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-
-void error_handling(char *message) {
-    std::cout << message << std::endl;
-    exit(1);
-}
-
-void success_handling(char *message) {
-    std::cout << message << std::endl;
-}
+#include "hello.h"
 
 TEST(server, case1) {
     int server_socket_fd;
@@ -62,3 +54,13 @@ TEST(server, case1) {
     close(server_socket_fd);
 }
 
+
+
+void error_handling(char *message) {
+    std::cout << message << std::endl;
+    exit(1);
+}
+
+void success_handling(char *message) {
+    std::cout << message << std::endl;
+}

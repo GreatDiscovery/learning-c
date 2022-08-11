@@ -13,7 +13,7 @@ add_executable(
         example_add.cpp
         sample1.cpp
         basic/for_test.cpp
-        basic/iterator_test.cpp basic/iterator_test.h basic/std_function_test.cpp basic/std_function_test2.cpp basic/std_bind.cpp network/hello_server.cpp)
+        basic/iterator_test.cpp basic/iterator_test.h basic/std_function_test.cpp basic/std_function_test2.cpp basic/std_bind.cpp network/hello_server.cpp network/hello_client.cpp network/hello.h)
 
 target_link_libraries(unit_tests
         PRIVATE
