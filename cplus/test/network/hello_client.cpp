@@ -2,10 +2,6 @@
 // Created by Gavin on 2022/8/11.
 //
 
-#include <iostream>
-#include <gtest/gtest.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
 #include "hello.h"
 
 TEST(client, case1) {

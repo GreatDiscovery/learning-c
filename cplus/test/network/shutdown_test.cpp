@@ -1,10 +1,12 @@
 //
-// Created by Gavin on 2022/8/9.
+// Created by Gavin on 2022/8/12.
+// 测试shutdown，连接半关闭。要么关闭输入流，要么关闭输出流。比直接close更加灵活
 //
 
 #include "hello.h"
 
-TEST(server, case1) {
+TEST(shutdown_test, case1) {
+    // todo
     int server_socket_fd;
     int client_socket_fd;
 
@@ -48,15 +50,4 @@ TEST(server, case1) {
     // close连接
     close(client_socket_fd);
     close(server_socket_fd);
-}
-
-
-
-void error_handling(char *message) {
-    std::cout << message << std::endl;
-    exit(1);
-}
-
-void success_handling(char *message) {
-    std::cout << message << std::endl;
 }
