@@ -14,6 +14,7 @@ void func() {
 }
 
 struct Foo {
+    // 仿函数（Functor）又称为函数对象（Function Object）是一个能行使函数功能的类
     void operator()() {
         cout << "这是一个仿函数!" << endl;
     }
