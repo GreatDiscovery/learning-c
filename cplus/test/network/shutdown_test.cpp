@@ -49,6 +49,7 @@ TEST(shutdown_test, case1) {
     FILE *fp = fopen("shutdown_test.cpp", "rb");
 
     while (1) {
+        // todo 第七章再完善
 //        read_cnt = fread()
     }
 

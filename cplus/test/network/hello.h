@@ -15,3 +15,5 @@
 void error_handling(char *message);
 
 void success_handling(char *message);
+
+void str_echo(int sockfd);
