@@ -4,9 +4,11 @@
 //
 
 #include "hello.h"
+#define BUF_SIZE 30
 
 TEST(shutdown_test, case1) {
-    // todo
+    char buf[BUF_SIZE];
+    int read_cnt;
     int server_socket_fd;
     int client_socket_fd;
 
@@ -44,8 +46,11 @@ TEST(shutdown_test, case1) {
         success_handling("accept() success");
     }
 
-    char message[] = "hello socket";
-    write(client_socket_fd, message, sizeof(message));
+    FILE *fp = fopen("shutdown_test.cpp", "rb");
+
+    while (1) {
+//        read_cnt = fread()
+    }
 
     // close连接
     close(client_socket_fd);
