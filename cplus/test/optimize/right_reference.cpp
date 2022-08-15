@@ -23,14 +23,14 @@ struct A {
     ~A() {
         cout << "destruct: " << ++g_destructCount << endl;
     }
-
-
-    static A GetA() {
-        return A();
-    }
 };
 
+A GetA() {
+    return A();
+}
+
+
 TEST(right_test, 右值引用特性) {
-    A a = A::GetA();
-    return;
+    // 这里优化器会把临时对象优化掉，只调用了构造函数，而没有调用拷贝构造函数
+    A a = GetA();
 }

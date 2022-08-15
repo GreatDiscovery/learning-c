@@ -5,19 +5,6 @@
 // 回射函数，客户端输入什么，服务端返回什么
 #include "hello.h"
 
-void str_echo(int socket_fd) {
-    size_t n;
-    char buf[BUFSIZ];
-
-    again:
-    while ((n = read(socket_fd, buf, BUFSIZ)) > 0) {
-        write(socket_fd, buf, n);
-    }
-//    if (n < 0) {
-//        goto again;
-//    }
-}
-
 TEST(echo_test, 回射server) {
     int server_listen_fd;
     int client_socket_fd;
