@@ -72,8 +72,12 @@ TEST(echo_test, 回射server) {
         }
         close(server_connect_fd);
     }
+}
 
-    // close连接
-    close(client_socket_fd);
-    close(server_listen_fd);
+void str_echo(int conn_fd) {
+    int str_len;
+    char message[BUFSIZ];
+    while ((str_len = read(conn_fd, message, BUFSIZ)) != 0) {
+        write(conn_fd, message, str_len);
+    }
 }
