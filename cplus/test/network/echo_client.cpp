@@ -3,11 +3,14 @@
 //
 
 #include "hello.h"
+#include "string"
 
 TEST(echo_client, 回射客户端) {
     char message[BUFSIZ];
     int client_socket_fd;
     int str_len;
+    size_t line_cap;
+    char *line = NULL;
 
     client_socket_fd = socket(PF_INET, SOCK_STREAM, 0);
     if (client_socket_fd == -1) {
@@ -32,8 +35,8 @@ TEST(echo_client, 回射客户端) {
     while (1) {
         // fixme 标准输入和输出没有生效
         fputs("Input message(Q to quit): ", stdout);
-        fgets(message, BUF_SIZE, stdin);
-
+//        fgets(message, BUF_SIZE, stdin);
+        std::cin.getline(message, BUFSIZ);
         if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
             break;
 

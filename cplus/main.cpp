@@ -17,8 +17,10 @@ TEST(HelloTest, BasicAssertions) {
 
 
 
-//int main() {
-//    std::cout << "Hello, World!" << std::endl;
-//    return 0;
-//}
+int main() {
+    char str[20];
+    std::cin.getline(str, 20);
+    cout << str << endl;
+    return 0;
+}
 
