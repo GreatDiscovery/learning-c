@@ -51,7 +51,7 @@ int main() {
     while (1) {
         fputs("Input message(Q to quit): ", stdout);
         std::cin.getline(message, BUFSIZ);
-        if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
+        if (!strcmp(message, "q") || !strcmp(message, "Q"))
             break;
         printf("Message from console: %s\n", message);
         write(client_socket_fd, message, strlen(message));
