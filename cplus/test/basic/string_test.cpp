@@ -5,6 +5,7 @@
 #include "../basic.h"
 #include "string"
 using namespace std;
+
 TEST(string_test, 字符串比较) {
     char *s1 = "hello";
     char *s2 = "world";
