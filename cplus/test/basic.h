@@ -8,5 +8,4 @@
 #include <iostream>
 #include <gtest/gtest.h>
 #include <algorithm>
-
 #endif //CPLUS_BASIC_H

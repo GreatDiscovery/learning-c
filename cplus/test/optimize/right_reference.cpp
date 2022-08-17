@@ -25,6 +25,8 @@ struct A {
     }
 };
 
+A GetA();
+
 A GetA() {
     return A();
 }
@@ -33,4 +35,11 @@ A GetA() {
 TEST(right_test, 右值引用特性) {
     // 这里优化器会把临时对象优化掉，只调用了构造函数，而没有调用拷贝构造函数
     A a = GetA();
+
+    A newNewA = a;
+
+    A&& newA = GetA();
+
+
+
 }
