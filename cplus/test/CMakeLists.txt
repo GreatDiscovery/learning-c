@@ -9,7 +9,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # 该参数用来开启或关闭编译器优化，优化一些函数返回的tmp对象
-add_compile_options(-Wall -fno-elide-constructors)
+#add_compile_options(-Wall -fno-elide-constructors)
 
 add_executable(
         unit_tests
