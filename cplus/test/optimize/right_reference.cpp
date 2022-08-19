@@ -40,6 +40,4 @@ TEST(right_test, 右值引用特性) {
 
     A&& newA = GetA();
 
-
-
 }
