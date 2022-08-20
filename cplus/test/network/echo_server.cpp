@@ -6,6 +6,8 @@
 #include "hello.h"
 #include <unistd.h>
 
+void sig_child(int signo);
+
 TEST(echo_test, 回射server) {
     int server_listen_fd;
     int client_socket_fd;
@@ -41,6 +43,13 @@ TEST(echo_test, 回射server) {
         success_handling("listen() success");
     }
 
+    // 信号处理
+    struct sigaction act, oldact;
+    act.sa_handler = sig_child;
+    sigaddset(&act.sa_mask, SIGQUIT);
+    act.sa_flags = SA_RESETHAND | SA_NODEFER;
+    sigaction(SIGCHLD, &act, &oldact);
+
     while (1) {
         child_len = sizeof(child_pid);
         server_connect_fd = accept(server_listen_fd, (struct sockaddr *) &child_server_address, &child_len);
@@ -62,7 +71,15 @@ void str_echo(int conn_fd) {
     int str_len;
     char message[BUFSIZ];
     while ((str_len = read(conn_fd, message, BUFSIZ)) != 0) {
-        printf("Message from client: %s", message);
+        printf("Message from client: %s\n", message);
         write(conn_fd, message, str_len);
     }
+}
+
+// signal handler
+void sig_child(int signo) {
+    pid_t pid;
+    int stat;
+    pid = wait(&stat);
+    std::cout << "child " << pid << " terminated" << std::endl;
 }

@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <signal.h>
 #include "string"
 #define BUF_SIZE 1024
 
