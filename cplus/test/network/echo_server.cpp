@@ -51,6 +51,8 @@ TEST(echo_test, 回射server) {
     sigaction(SIGCHLD, &act, &oldact);
     sigaction(SIGTERM, &act, &oldact);
 
+//    sleep(600);
+
     while (1) {
         child_len = sizeof(child_pid);
         server_connect_fd = accept(server_listen_fd, (struct sockaddr *) &child_server_address, &child_len);
