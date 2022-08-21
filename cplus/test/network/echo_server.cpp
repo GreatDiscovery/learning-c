@@ -49,6 +49,7 @@ TEST(echo_test, 回射server) {
     sigaddset(&act.sa_mask, SIGQUIT);
     act.sa_flags = SA_RESETHAND | SA_NODEFER;
     sigaction(SIGCHLD, &act, &oldact);
+    sigaction(SIGTERM, &act, &oldact);
 
     while (1) {
         child_len = sizeof(child_pid);
@@ -73,6 +74,7 @@ void str_echo(int conn_fd) {
     while ((str_len = read(conn_fd, message, BUFSIZ)) != 0) {
         printf("Message from client: %s\n", message);
         write(conn_fd, message, str_len);
+        sleep(1);
     }
 }
 
@@ -80,6 +82,9 @@ void str_echo(int conn_fd) {
 void sig_child(int signo) {
     pid_t pid;
     int stat;
-    pid = wait(&stat);
-    std::cout << "child " << pid << " terminated" << std::endl;
+//    pid = wait(&stat);
+    // 处理所有终止的子进程。wait会阻塞，而wati_pid加了WNOHANG不会阻塞
+    while ((pid = waitpid(-1, &stat, WNOHANG)) > 0) {
+        std::cout << "child " << pid << " terminated" << std::endl;
+    }
 }
