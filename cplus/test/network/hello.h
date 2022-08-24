@@ -12,6 +12,7 @@
 #include <signal.h>
 #include "string"
 #define BUF_SIZE 1024
+#define RWRWRW (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
 
 #endif //CPLUS_HELLO_H
 
