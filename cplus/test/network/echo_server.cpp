@@ -71,7 +71,7 @@ TEST(echo_test, 回射server) {
     }
 }
 
-TEST(echo_test, server进程正常终止) {
+TEST(echo_client, server进程正常终止) {
     char message[BUFSIZ];
     int client_socket_fd;
     int str_len;
