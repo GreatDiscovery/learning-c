@@ -36,7 +36,7 @@ TEST(file_test, read_test) {
     close(fd);
 }
 
-// fixme 未能正确读到数据
+// fixme 1.未能正确读到数据 2. 乱码了
 TEST(file_test, lseek_test) {
     std::cout << "start lseek test" << std::endl;
     char buf[BUF_SIZE];
