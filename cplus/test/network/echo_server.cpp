@@ -98,18 +98,21 @@ TEST(echo_client, server进程正常终止) {
         success_handling("connect() success");
     }
 
-    int fd = open("data.txt", O_CREAT, RWRWRW);
+    int fd = open("data.txt", O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
     if (fd == -1) {
         error_handling("open() failed!");
     }
     while (1) {
         std::cout << "Input message from data.txt (Q to quit):" << std::endl;
-        if (read(fd, message, sizeof(message)) == -1) {
-            error_handling("read() failed!");
+        str_len = read(fd, message, sizeof(message));
+        if (str_len > 0) {
+            message[str_len] = 0;
         }
+        lseek(fd, 0, SEEK_SET);
+        std::cout << "current position:" << lseek(fd, 0, SEEK_CUR) << std::endl;
+
         if (!strcmp(message, "q") || !strcmp(message, "Q"))
             break;
-        // fixme file read position problem
         std::cout << "Message from console:" << message << std::endl;
         write(client_socket_fd, message, strlen(message));
         str_len = read(client_socket_fd, message, BUF_SIZE - 1);

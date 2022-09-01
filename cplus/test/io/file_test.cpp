@@ -36,23 +36,6 @@ TEST(file_test, read_test) {
     close(fd);
 }
 
-// fixme 1.未能正确读到数据 2. 乱码了
-TEST(file_test, lseek_test) {
-    std::cout << "start lseek test" << std::endl;
-    char buf[BUF_SIZE];
-    int fd = open("lseek.txt", O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
-    if (fd == -1) {
-        error_handling("open() failed!");
-    }
-    while (1) {
-        size_t str_len;
-        str_len = read(fd, buf, sizeof(buf));
-        if (str_len > 0) {
-            buf[str_len] = 0;
-        }
-        lseek(fd, 0, SEEK_SET);
-        std::cout << "lseek cur:" << lseek(fd, 0, SEEK_CUR) << std::endl;
-        std::cout << "content:" << buf << std::endl;
-        sleep(5);
-    }
+TEST(file_test, FILE输入流) {
+
 }
