@@ -5,6 +5,7 @@
 
 #include "file_test.h"
 #include "../network/hello.h"
+#include "stdio.h"
 
 #define BUF_SIZE 100
 
@@ -36,6 +37,22 @@ TEST(file_test, read_test) {
     close(fd);
 }
 
+// 标准输入和输出
 TEST(file_test, FILE输入流) {
-
+    char buf[] = "hello world!\n";
+    char receive[BUFSIZ];
+    // 创建 | 只写 | 如果有内容清空
+    // 会在对应的test目录下创建新的文件，这里创建的文件没有相关的权限，最后一个参数赋予了权限
+    int fd = open("fgets.txt", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+    if (fd == -1) {
+        error_handling("open() failed!");
+    }
+    if (write(fd, buf, sizeof(buf)) == -1) {
+        error_handling("write() failed!");
+    }
+    FILE *file = fopen("fgets.txt", "r");
+    std::cout << "fopen scuccess!" << std::endl;
+    fgets(receive, BUFSIZ, file);
+    std::cout << receive << std::endl;
+    close(fd);
 }
