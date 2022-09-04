@@ -21,3 +21,5 @@ void error_handling(char *message);
 void success_handling(char *message);
 
 void str_echo(int sockfd);
+
+void str_echo2(FILE *file, int sockfd);

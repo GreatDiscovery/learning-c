@@ -71,6 +71,50 @@ TEST(echo_test, 回射server) {
     }
 }
 
+TEST(echo_client, server进程正常终止client收到RST) {
+    char message[BUFSIZ];
+    int client_socket_fd;
+    int str_len;
+    size_t line_cap;
+    char *line = NULL;
+
+    client_socket_fd = socket(PF_INET, SOCK_STREAM, 0);
+    if (client_socket_fd == -1) {
+        error_handling("socket() error");
+    } else {
+        success_handling("socket() success");
+    }
+
+    struct sockaddr_in server_address;
+    memset(&server_address, 0, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    server_address.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server_address.sin_port = htons(atoi("8888"));
+
+    //调用 connect连接server
+    if (connect(client_socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) == -1) {
+        error_handling("connect() error");
+    } else {
+        success_handling("connect() success");
+    }
+
+    int fd = open("data.txt", O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
+    if (fd == -1) {
+        error_handling("open() failed!");
+    }
+
+    FILE *file = fopen("data.txt", "r");
+
+    while (1) {
+        str_echo2(file, client_socket_fd);
+        sleep(5);
+    }
+    std::cout << "quit!" << std::endl;
+    close(fd);
+    // close连接
+    close(client_socket_fd);
+}
+
 TEST(echo_client, server进程正常终止) {
     char message[BUFSIZ];
     int client_socket_fd;
@@ -133,6 +177,15 @@ void str_echo(int conn_fd) {
         std::cout << "Message from client:" << message << std::endl;
         write(conn_fd, message, str_len);
         sleep(1);
+    }
+}
+
+void str_echo2(FILE *fp, int connect_fd) {
+    char send_line[BUFSIZ], receive_line[BUFSIZ];
+    while (fgets(send_line, BUFSIZ, fp) != NULL) {
+        write(connect_fd, send_line, strlen(send_line));
+        read(connect_fd, receive_line, BUFSIZ);
+        std::cout << "receive message:" << receive_line << std::endl;
     }
 }
 
