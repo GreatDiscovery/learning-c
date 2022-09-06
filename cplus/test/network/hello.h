@@ -23,3 +23,5 @@ void success_handling(char *message);
 void str_echo(int sockfd);
 
 void str_echo2(FILE *file, int sockfd);
+
+void str_cli_select(FILE *fd, int sockfd);
