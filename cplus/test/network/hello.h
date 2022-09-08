@@ -25,3 +25,5 @@ void str_echo(int sockfd);
 void str_echo2(FILE *file, int sockfd);
 
 void str_cli_select(FILE *fd, int sockfd);
+
+void str_cli_shutdown(FILE *fp, int sockfd);

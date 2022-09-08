@@ -210,6 +210,44 @@ TEST(echo_client, select防止阻塞在某个fd上) {
     close(client_socket_fd);
 }
 
+TEST(echo_client, 调用shutdown单方向关闭) {
+    int client_socket_fd;
+
+    client_socket_fd = socket(PF_INET, SOCK_STREAM, 0);
+    if (client_socket_fd == -1) {
+        error_handling("socket() error");
+    } else {
+        success_handling("socket() success");
+    }
+
+    struct sockaddr_in server_address;
+    memset(&server_address, 0, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    server_address.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server_address.sin_port = htons(atoi("8888"));
+
+    //调用 connect连接server
+    if (connect(client_socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) == -1) {
+        error_handling("connect() error");
+    } else {
+        success_handling("connect() success");
+    }
+
+    int fd = open("data.txt", O_CREAT | O_RDWR | O_APPEND, S_IRWXU);
+    if (fd == -1) {
+        error_handling("open() failed!");
+    }
+
+    FILE *file = fopen("data.txt", "r");
+
+    str_cli_shutdown(file, client_socket_fd);
+
+    std::cout << "quit!" << std::endl;
+    close(fd);
+    // close连接
+    close(client_socket_fd);
+}
+
 void str_echo(int conn_fd) {
     int str_len;
     char message[BUFSIZ];
@@ -241,6 +279,38 @@ void sig_child(int signo) {
 
 // select主要解决客户端单阻塞问题
 void str_cli_select(FILE *fp, int sockfd) {
+    int maxfdp1;
+    fd_set rset;
+    char send_line[BUFSIZ], receive_line[BUFSIZ];
+
+    FD_ZERO(&rset);
+    while (true) {
+        FD_SET(fileno(fp), &rset);
+        FD_SET(sockfd, &rset);
+        maxfdp1 = std::max(fileno(fp), sockfd) + 1;
+        select(maxfdp1, &rset, nullptr, nullptr, nullptr);
+
+        // fd is ready.
+        if (FD_ISSET(sockfd, &rset)) {
+            read(sockfd, receive_line, BUFSIZ);
+            std::cout << "receive from server:" << receive_line << std::endl;
+        }
+
+        if (FD_ISSET(fileno(fp), &rset)) {
+            if (fgets(send_line, BUFSIZ, fp) == nullptr) {
+                return;
+            }
+            std::cout << "receive from file:" << send_line << std::endl;
+            write(sockfd, send_line, strlen(send_line));
+        }
+        // todo 必须睡眠一段时间，否则select fd没有准备好。测试该事件如何配置
+        sleep(5);
+
+    }
+}
+
+// todo shutdown
+void str_cli_shutdown(FILE *fp, int sockfd) {
     int maxfdp1;
     fd_set rset;
     char send_line[BUFSIZ], receive_line[BUFSIZ];
