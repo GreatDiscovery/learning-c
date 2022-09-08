@@ -267,5 +267,6 @@ void str_cli_select(FILE *fp, int sockfd) {
         }
         // todo 必须睡眠一段时间，否则select fd没有准备好。测试该事件如何配置
         sleep(5);
+
     }
 }
