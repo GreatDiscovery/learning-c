@@ -4,6 +4,7 @@
 
 #include "../basic.h"
 
+using namespace std;
 struct GetLeftSize {
     static const int value = 1;
 };
@@ -31,4 +32,10 @@ TEST(traits_test, 判断类型) {
     std::cout << "const int&: " << std::is_const<const int&>::value << std::endl;
     std::cout << "const int*: " << std::is_const<const int*>::value << std::endl;
     std::cout << "int* const: " << std::is_const<int* const>::value << std::endl;
+}
+
+TEST(traits_test, 判断类型相同) {
+    cout << is_same<int, int>::value << endl;
+    cout << is_same<int, unsigned int>::value << endl;
+    cout << is_same<int, signed int>::value << endl;
 }
