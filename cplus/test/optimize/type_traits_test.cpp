@@ -54,6 +54,7 @@ struct fn_class {
 };
 
 TEST(traits_test, 编译期获取一个可调用对象的返回类型) {
+    // decltype简介 https://www.cnblogs.com/QG-whz/p/4952980.html
     typedef std::result_of<decltype(fn) &(int)>::type A;
     typedef result_of<fn_ref(int)>::type B;
     typedef result_of<fn_ptr(int)>::type C;
