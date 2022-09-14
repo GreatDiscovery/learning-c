@@ -309,34 +309,44 @@ void str_cli_select(FILE *fp, int sockfd) {
     }
 }
 
-// todo shutdown
 void str_cli_shutdown(FILE *fp, int sockfd) {
-    int maxfdp1;
+    int maxfdp1, stdineof;
     fd_set rset;
-    char send_line[BUFSIZ], receive_line[BUFSIZ];
+    char buf[BUFSIZ];
+    int len;
 
+    stdineof = 0;
     FD_ZERO(&rset);
     while (true) {
-        FD_SET(fileno(fp), &rset);
+        if (stdineof == 0) {
+            FD_SET(fileno(fp), &rset);
+        }
         FD_SET(sockfd, &rset);
         maxfdp1 = std::max(fileno(fp), sockfd) + 1;
         select(maxfdp1, &rset, nullptr, nullptr, nullptr);
 
         // fd is ready.
         if (FD_ISSET(sockfd, &rset)) {
-            read(sockfd, receive_line, BUFSIZ);
-            std::cout << "receive from server:" << receive_line << std::endl;
+            if ((len = read(sockfd, buf, BUFSIZ)) == 0) {
+                if (stdineof == 1) {
+                    return;
+                } else {
+                    error_handling("str_cli: server terminated prematurely");
+                }
+            }
+            std::cout << "receive from server:" << buf << std::endl;
+            write(fileno(stdout), buf, len);
         }
 
         if (FD_ISSET(fileno(fp), &rset)) {
-            if (fgets(send_line, BUFSIZ, fp) == nullptr) {
-                return;
+            if ((len = read(fileno(fp), buf, BUFSIZ)) == 0) {
+                stdineof = 1;
+                shutdown(sockfd, SHUT_WR);
+                FD_CLR(fileno(fp), &rset);
+                continue;
             }
-            std::cout << "receive from file:" << send_line << std::endl;
-            write(sockfd, send_line, strlen(send_line));
+            std::cout << "receive from file:" << buf << std::endl;
+            write(sockfd, buf, len);
         }
-        // todo 必须睡眠一段时间，否则select fd没有准备好。测试该事件如何配置
-        sleep(5);
-
     }
 }
