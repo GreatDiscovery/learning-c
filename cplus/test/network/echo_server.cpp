@@ -71,6 +71,27 @@ TEST(echo_test, 回射server) {
     }
 }
 
+TEST(echo_server, 带select的server) {
+    int listen_fd;
+    char buf[BUFSIZ];
+    struct sockaddr_in server_addr;
+
+    listen_fd = socket(AF_INET, SOCK_STREAM, 0);
+
+    bzero(&server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    // htonl等函数转换主机字节序和网络字节序：https://blog.csdn.net/bzhxuexi/article/details/20460655
+    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    server_addr.sin_port = htons(atoi("8888"));
+
+    // C中结构体的强制转换的理解：https://codeantenna.com/a/9DKqkpLl8g
+    bind(listen_fd, (struct sockaddr *) &server_addr, sizeof(server_addr));
+    listen(listen_fd, 10);
+
+    // todo
+
+}
+
 TEST(echo_client, server进程正常终止client收到RST) {
     char message[BUFSIZ];
     int client_socket_fd;
