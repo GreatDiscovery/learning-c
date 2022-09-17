@@ -72,9 +72,12 @@ TEST(echo_test, 回射server) {
 }
 
 TEST(echo_server, 带select的server) {
-    int listen_fd;
+    int listen_fd, connect_fd, maxi, maxfd;
     char buf[BUFSIZ];
-    struct sockaddr_in server_addr;
+    struct sockaddr_in server_addr, child_addr;
+    int nearby, client[FD_SETSIZE];
+    fd_set read_set, all_set;
+    socklen_t child_len;
 
     listen_fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -88,7 +91,24 @@ TEST(echo_server, 带select的server) {
     bind(listen_fd, (struct sockaddr *) &server_addr, sizeof(server_addr));
     listen(listen_fd, 10);
 
-    // todo
+    maxfd = listen_fd;
+    maxi = -1;
+    for (int i = 0; i < FD_SETSIZE; i++) {
+        client[i] = -1;
+    }
+    FD_ZERO(&all_set);
+    FD_SET(listen_fd, &all_set);
+
+    while (true) {
+        read_set = all_set;
+        nearby = select(maxfd + 1, &read_set, NULL, NULL, NULL);
+        if (FD_ISSET(listen_fd, &read_set)) {
+            child_len = sizeof(child_addr);
+            // accept的第三个参数是一个典型的值-结果参数。进程传值给内核，内核利用该指针返回结果。
+            connect_fd = accept(listen_fd, (struct sockaddr *) &child_addr, &child_len);
+        }
+
+    }
 
 }
 
