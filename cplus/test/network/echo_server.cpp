@@ -72,10 +72,10 @@ TEST(echo_test, 回射server) {
 }
 
 TEST(echo_server, 带select的server) {
-    int listen_fd, connect_fd, maxi, maxfd;
+    int listen_fd, connect_fd, maxi, maxfd, i, socket_fd, n;
     char buf[BUFSIZ];
     struct sockaddr_in server_addr, child_addr;
-    int nearby, client[FD_SETSIZE];
+    int n_ready, client[FD_SETSIZE];
     fd_set read_set, all_set;
     socklen_t child_len;
 
@@ -100,12 +100,55 @@ TEST(echo_server, 带select的server) {
     FD_SET(listen_fd, &all_set);
 
     while (true) {
+        // 这里有一个拷贝赋值
         read_set = all_set;
-        nearby = select(maxfd + 1, &read_set, NULL, NULL, NULL);
+        n_ready = select(maxfd + 1, &read_set, NULL, NULL, NULL);
+        // 有新链接进来
         if (FD_ISSET(listen_fd, &read_set)) {
             child_len = sizeof(child_addr);
             // accept的第三个参数是一个典型的值-结果参数。进程传值给内核，内核利用该指针返回结果。
             connect_fd = accept(listen_fd, (struct sockaddr *) &child_addr, &child_len);
+            for (i = 0; i < FD_SETSIZE; i++) {
+                if (client[i] < 0) {
+                    // server端自己维护一套fd
+                    client[i] = connect_fd;
+                    break;
+                }
+            }
+            if (i == FD_SETSIZE) {
+                error_handling("too many clients");
+            }
+            FD_SET(connect_fd, &all_set);
+            if (connect_fd > maxfd) {
+                maxfd = connect_fd;
+            }
+            if (i > maxi) {
+                // 记录client里记录的最大的fd的索引，避免整个client循环
+                maxi = i;
+            }
+            if (--n_ready <= 0) {
+                continue;
+            }
+        }
+
+        // 循环所有已经建立连接的fd，判断是否read for read
+        for (i = 0; i <= maxi; i++) {
+            if ((socket_fd = client[i]) < 0) {
+                continue;
+            }
+            if (FD_ISSET(socket_fd, &read_set)) {
+                if ((n == read(socket_fd, buf, BUFSIZ)) == 0) {
+                    // 没有读到数据，说明客户端断开了连接
+                    close(socket_fd);
+                    FD_CLR(socket_fd, &all_set);
+                    client[i] = -1;
+                } else {
+                    write(socket_fd, buf, n);
+                }
+                if (--n_ready <= 0) {
+                    break;
+                }
+            }
         }
 
     }
