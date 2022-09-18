@@ -90,6 +90,7 @@ TEST(echo_server, 带select的server) {
     // C中结构体的强制转换的理解：https://codeantenna.com/a/9DKqkpLl8g
     bind(listen_fd, (struct sockaddr *) &server_addr, sizeof(server_addr));
     listen(listen_fd, 10);
+    success_handling("listen success!");
 
     maxfd = listen_fd;
     maxi = -1;
@@ -137,7 +138,7 @@ TEST(echo_server, 带select的server) {
                 continue;
             }
             if (FD_ISSET(socket_fd, &read_set)) {
-                if ((n == read(socket_fd, buf, BUFSIZ)) == 0) {
+                if ((n = read(socket_fd, buf, BUFSIZ)) == 0) {
                     // 没有读到数据，说明客户端断开了连接
                     close(socket_fd);
                     FD_CLR(socket_fd, &all_set);
@@ -407,7 +408,7 @@ void str_cli_shutdown(FILE *fp, int sockfd) {
         }
         FD_SET(sockfd, &rset);
         maxfdp1 = std::max(fileno(fp), sockfd) + 1;
-        select(maxfdp1, &rset, nullptr, nullptr, nullptr);
+        int n_ready = select(maxfdp1, &rset, nullptr, nullptr, nullptr);
 
         // fd is ready.
         if (FD_ISSET(sockfd, &rset)) {
