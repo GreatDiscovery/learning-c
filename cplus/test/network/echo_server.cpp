@@ -6,6 +6,8 @@
 #include "hello.h"
 #include "../io/file_test.h"
 #include <unistd.h>
+#include <limits.h>
+#include <poll.h>
 
 void sig_child(int signo);
 
@@ -152,6 +154,35 @@ TEST(echo_server, 带select的server) {
             }
         }
 
+    }
+
+}
+
+TEST(echo_server, 带poll的server) {
+    int listen_fd;
+    struct sockaddr_in server_addr;
+    struct pollfd client[OPEN_MAX];
+    int max_index, n_ready;
+
+    listen_fd = socket(AF_INET, SOCK_STREAM, 0);
+
+    bzero(&server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    server_addr.sin_port = htons(atoi("8888"));
+
+    bind(listen_fd, (struct sockaddr *) &server_addr, sizeof(server_addr));
+    listen(listen_fd, 10);
+
+    client[0].fd = listen_fd;
+    client[0].events = POLLRDNORM;
+    for (int i = 0; i < OPEN_MAX; i++) {
+        client[i].fd = -1;
+    }
+    max_index = 0;
+
+    while (true) {
+        n_ready = poll(client, max_index + 1, RLIM_INFINITY);
     }
 
 }
