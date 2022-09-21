@@ -159,10 +159,12 @@ TEST(echo_server, 带select的server) {
 }
 
 TEST(echo_server, 带poll的server) {
-    int listen_fd;
-    struct sockaddr_in server_addr;
+    int listen_fd, conn_fd, i, socket_fd, data_len;
+    struct sockaddr_in server_addr, child_addr;
     struct pollfd client[OPEN_MAX];
     int max_index, n_ready;
+    socklen_t child_len;
+    char buf[BUFSIZ];
 
     listen_fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -176,13 +178,53 @@ TEST(echo_server, 带poll的server) {
 
     client[0].fd = listen_fd;
     client[0].events = POLLRDNORM;
-    for (int i = 0; i < OPEN_MAX; i++) {
+    for (int i = 1; i < OPEN_MAX; i++) {
         client[i].fd = -1;
     }
     max_index = 0;
 
     while (true) {
         n_ready = poll(client, max_index + 1, RLIM_INFINITY);
+
+        if (client[0].revents & POLLRDNORM) {
+            child_len = sizeof(child_addr);
+            conn_fd = accept(listen_fd, (struct sockaddr *) &child_addr, &child_len);
+
+            for (i = 1; i < OPEN_MAX; i++) {
+                if (client[i].fd < 0) {
+                    client[i].fd = conn_fd;
+                    break;
+                }
+            }
+            if (i == OPEN_MAX) {
+                error_handling("too many clients");
+            }
+            client[i].events = POLLRDNORM;
+            if (i > max_index) {
+                max_index = i;
+            }
+            if (--n_ready <= 0) {
+                continue;
+            }
+        }
+
+        for (i = 1; i <= max_index; i++) {
+            if ((socket_fd = client[i].fd) < 0) {
+                continue;
+            }
+            if (client[i].revents & (POLLRDNORM | POLLERR)) {
+                if ((data_len = read(socket_fd, buf, BUFSIZ)) <= 0) {
+                    close(socket_fd);
+                    client[i].fd = -1;
+                } else {
+                    write(socket_fd, buf, data_len);
+                }
+            }
+            if (--n_ready <= 0) {
+                break;
+            }
+        }
+
     }
 
 }
