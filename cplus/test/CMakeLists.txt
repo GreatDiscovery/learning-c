@@ -16,7 +16,7 @@ add_executable(
         example_add.cpp
         sample1.cpp
         basic/for_test.cpp
-        basic/iterator_test.cpp basic/iterator_test.h basic/std_function_test.cpp basic/std_function_test2.cpp basic/std_bind.cpp network/hello_server.cpp network/hello_client.cpp network/hello.h io/file_test.cpp io/file_test.h network/shutdown_test.cpp basic/lambda_test.cpp basic.h basic/tuple_test.cpp network/echo_server.cpp network/echo_client.cpp optimize/right_reference.cpp basic/fork_test.cpp basic/string_test.cpp basic/copy_constructor_test.cpp basic/stdin_test.cpp signal/signal_test.cpp optimize/deep_copy.cpp basic/MyString.cpp optimize/forward_test.cpp io/lseek_test.cpp collection/emplace_back_test.cpp optimize/type_traits_test.cpp optimize/decltype_test.cpp optimize/template_test.cpp collection/tuple_test.cpp)
+        basic/iterator_test.cpp basic/iterator_test.h basic/std_function_test.cpp basic/std_function_test2.cpp basic/std_bind.cpp network/hello_server.cpp network/hello_client.cpp network/hello.h io/file_test.cpp io/file_test.h network/shutdown_test.cpp basic/lambda_test.cpp basic.h basic/tuple_test.cpp network/echo_server.cpp network/echo_client.cpp optimize/right_reference.cpp basic/fork_test.cpp basic/string_test.cpp basic/copy_constructor_test.cpp basic/stdin_test.cpp signal/signal_test.cpp optimize/deep_copy.cpp basic/MyString.cpp optimize/forward_test.cpp io/lseek_test.cpp collection/emplace_back_test.cpp optimize/type_traits_test.cpp optimize/decltype_test.cpp optimize/template_test.cpp collection/tuple_test.cpp network/daemon_init.cpp)
 
 target_link_libraries(unit_tests
         PRIVATE
