@@ -13,4 +13,5 @@
 #include <arpa/inet.h>
 #include <signal.h>
 #include <net/if.h>
+#include <sys/ioctl.h>
 #endif //CPLUS_BASIC_H

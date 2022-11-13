@@ -69,3 +69,37 @@ TEST(get_ifi_info, 获取所有的up网络接口) {
     media: autoselect (100baseTX <full-duplex>)
     status: active
  **/
+
+
+struct ifi_info *get_ifi_info() {
+    int sock_fd, last_len, len;
+    struct ifreq *ifr;
+    struct ifconf ifc;
+    char *buf, lastname[BUFSIZ];
+    struct ifi_info *ifi, *ifi_head, **ifi_p_next, *sdlname;
+
+    sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    last_len = 0;
+    len = 100 * sizeof(struct ifreq);
+    // 这里循环的目的是防止缓冲区不够，因为ioctl有可能会在返回截断的时候依旧返回成功
+    for (;;) {
+        buf = (char *) malloc(len);
+        ifc.ifc_len = len;
+        ifc.ifc_ifcu.ifcu_buf = buf;
+        if (ioctl(sock_fd, SIOCGIFCONF, &ifc) < 0) {
+        } else {
+            if (ifc.ifc_len == last_len) {
+                break;
+            }
+            last_len = ifc.ifc_len;
+        }
+        len += 10 * sizeof(struct ifreq);
+        free(buf);
+    }
+
+    ifi_head = NULL;
+    ifi_p_next = &ifi_head;
+    lastname[0] = 0;
+    sdlname = NULL;
+
+}
