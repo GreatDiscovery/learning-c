@@ -24,6 +24,7 @@ struct ifi_info {
     struct ifi_info *ifi_next; // 列表指针
 };
 
+#define IFI_ALIAS 1
 
 struct ifi_info *get_ifi_info(int, int);
 

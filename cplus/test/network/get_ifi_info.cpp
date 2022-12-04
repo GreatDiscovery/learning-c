@@ -5,7 +5,7 @@
 #include "../basic.h"
 #include "unpifi.h"
 
-TEST(get_ifi_info, 获取所有的up网络接口) {
+TEST(get_ifi_info_test, 获取所有的up网络接口) {
     struct ifi_info *ifi, *ifi_head;
     struct sockaddr *sa;
     int family, doaliases, i;
@@ -71,12 +71,13 @@ TEST(get_ifi_info, 获取所有的up网络接口) {
  **/
 
 
-struct ifi_info *get_ifi_info() {
-    int sock_fd, last_len, len;
-    struct ifreq *ifr;
+struct ifi_info *get_ifi_info(int family, int doaliases) {
+    int sock_fd, last_len, len, myflags, flags;
+    struct ifreq *ifr, ifrcopy;
     struct ifconf ifc;
-    char *buf, lastname[BUFSIZ];
+    char *buf, lastname[BUFSIZ], *ptr, *cptr;
     struct ifi_info *ifi, *ifi_head, **ifi_p_next, *sdlname;
+
 
     sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
     last_len = 0;
@@ -101,5 +102,47 @@ struct ifi_info *get_ifi_info() {
     ifi_p_next = &ifi_head;
     lastname[0] = 0;
     sdlname = NULL;
+
+    for (ptr = buf; ptr < buf + ifc.ifc_len; ifr = (struct ifreq *) ptr) {
+#ifdef HAVE_SOCKADDR_SA_LEN
+        len = max(sizeof(struct sockaddr), ifr->ifr_addr.sa_len);
+#else
+        switch (ifr->ifr_ifru.ifru_addr.sa_family) {
+#ifdef IPV6
+            case AF_INET6:
+                len = sizeof(struct sockaddr_in6);
+                bread;
+#endif
+            case AF_INET:
+            default:
+                len = sizeof(struct sockaddr);
+                break;
+        }
+#endif
+        ptr += sizeof(ifr->ifr_name) + len;
+        if (ifr->ifr_ifru.ifru_addr.sa_family != family) {
+            continue;
+        }
+        myflags = 0;
+        if ((cptr = strchr(ifr->ifr_name, ':')) != NULL) {
+            *cptr = 0;
+        }
+        if (strncmp(lastname, ifr->ifr_name, IFNAMSIZ) == 0) {
+            if (doaliases == 0) {
+                continue;
+            }
+            myflags = IFI_ALIAS;
+        }
+        memcpy(lastname, ifr->ifr_name, IFNAMSIZ);
+        ifrcopy = *ifr;
+        ioctl(sock_fd, SIOCGIFFLAGS, &ifrcopy);
+        flags = ifrcopy.ifr_ifru.ifru_flags;
+        if ((flags & IFF_UP) == 0) {
+            continue;
+        }
+        ifi = (struct ifi_info *) calloc(1, sizeof(struct ifi_info));
+
+    }
+
 
 }
