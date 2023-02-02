@@ -144,5 +144,9 @@ struct ifi_info *get_ifi_info(int family, int doaliases) {
 
     }
 
+    return ifi;
+}
 
+struct ifi_info *Get_ifi_info(int family, int doaliases) {
+    return nullptr;
 }
