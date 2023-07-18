@@ -8,4 +8,11 @@
 #include <iostream>
 #include <gtest/gtest.h>
 #include <algorithm>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <arpa/inet.h>
+#include <signal.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <pthread.h>
 #endif //CPLUS_BASIC_H
