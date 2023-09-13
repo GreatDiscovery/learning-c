@@ -6,6 +6,10 @@
 #include "string"
 using namespace std;
 
+TEST(rand_test, 测试随机数字) {
+    cout << rand() << endl;
+}
+
 TEST(string_test, 字符串比较) {
     char *s1 = "hello";
     char *s2 = "world";
