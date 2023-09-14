@@ -40,3 +40,16 @@ TEST(tuple_test, 创建tuple) {
     n = 10;
     print_tuple(t2);
 }
+
+TEST(s_test, 测试数组元素个数) {
+    static char* bio_worker_title[] = {
+            "bio_close_file",
+            "bio_aof",
+            "bio_lazy_free",
+    };
+    int a = sizeof(bio_worker_title);
+    int b = sizeof(*bio_worker_title);
+    cout << "a = " << a << endl;
+    cout << "b = " << b << endl;
+    cout << a / b << endl;
+}
