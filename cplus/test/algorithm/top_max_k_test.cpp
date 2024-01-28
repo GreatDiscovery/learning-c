@@ -2,8 +2,7 @@
 // Created by 宋博文 on 2024/1/28.
 //
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "../basic.h"
 
 typedef struct {
     int *array;
@@ -84,7 +83,7 @@ void printTopK(MaxHeap *heap) {
     printf("\n");
 }
 
-int main() {
+TEST(topK, topK测试最大k个数) {
     int k = 3; // Top-K 的大小
     MaxHeap *maxHeap = createMaxHeap(k);
 
@@ -101,6 +100,4 @@ int main() {
 
     // 销毁堆
     destroyMaxHeap(maxHeap);
-
-    return 0;
 }
