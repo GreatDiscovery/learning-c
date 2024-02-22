@@ -17,6 +17,9 @@ TEST(mem_test, 测试memory函数) {
         snprintf(arr[i].name, 10, "%d", i);
         arr[i].age = i;
     }
-    printf("name=%s\n", arr[0].name);
-    printf("age=%d\n", arr[0].age);
+    char* first = arr[0].name;
+    printf("before moving, first=%s\n", first);
+    memmove(arr, arr + 2, sizeof(arr[0]) * 8);
+    printf("[0] name=%s, age=%d\n", arr[0].name, arr[0].age);
+    printf("after moving, first=%s\n", first);
 }
