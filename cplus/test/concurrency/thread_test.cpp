@@ -71,7 +71,19 @@ void *thread1(void *arg) {
 void *thread2(void *arg) {
     pthread_mutex_lock(&mutex1);
     flag = 1;
+    sleep(1);
     printf("Thread 2 signaled!\n");
     pthread_cond_signal(&cond);
     pthread_mutex_unlock(&mutex1);
+}
+
+static char* bio_worker_title[] = {
+        "bio_close_file",
+        "bio_aof",
+        "bio_lazy_free",
+};
+
+TEST(pthread_test, 测试phread系列函数) {
+    int thread_num = (sizeof(bio_worker_title) / sizeof(*bio_worker_title));
+    printf("%lu, %lu, %d\n", sizeof(bio_worker_title), sizeof(*bio_worker_title), thread_num);
 }
