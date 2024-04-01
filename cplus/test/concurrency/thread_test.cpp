@@ -75,3 +75,10 @@ void *thread2(void *arg) {
     pthread_cond_signal(&cond);
     pthread_mutex_unlock(&mutex1);
 }
+
+TEST(pthread_test, 设置线程名称) {
+    pthread_t t1;
+    pthread_create(&t1, NULL, thread1, NULL);
+    // don't match macOS
+//    pthread_setname_np(t1, "test-1");
+}
