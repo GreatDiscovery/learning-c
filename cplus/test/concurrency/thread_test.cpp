@@ -88,9 +88,8 @@ void *thread3(void *arg) {
 }
 
 
-TEST(pthread_test, 设置线程名称) {
+TEST(pthread_test, 设置线程名称forMacOS) {
     pthread_t t1;
     pthread_create(&t1, NULL, thread3, NULL);
-    // don't match macOS
     pthread_join(t1, NULL);
 }
