@@ -76,9 +76,21 @@ void *thread2(void *arg) {
     pthread_mutex_unlock(&mutex1);
 }
 
+
+void *thread3(void *arg) {
+    printf("thred start");
+    pthread_setname_np("test-1");
+    pthread_t t = pthread_self();
+    char *name = (char *) malloc(7 * sizeof(char));
+    pthread_getname_np(t, name, 8);
+    printf("thread name=%s\n", name);
+    free(name);
+}
+
+
 TEST(pthread_test, 设置线程名称) {
     pthread_t t1;
-    pthread_create(&t1, NULL, thread1, NULL);
+    pthread_create(&t1, NULL, thread3, NULL);
     // don't match macOS
-//    pthread_setname_np(t1, "test-1");
+    pthread_join(t1, NULL);
 }
