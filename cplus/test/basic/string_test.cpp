@@ -7,8 +7,120 @@
 
 using namespace std;
 
-TEST(rand_test, 测试随机数字) {
-    cout << rand() << endl;
+struct server {
+    long long int shard_id;
+};
+
+int string2ll(const char *s, size_t slen, long long *value);
+
+void f1(long long int* l1);
+void f1(long long int* l1) {
+    *l1 = 5;
+}
+
+
+TEST(rand_test, 测试字符串转long) {
+    struct server s{};
+    s.shard_id = 1;
+    long long int shard_id = s.shard_id;
+    char str[] = "25";
+    string2ll(str, sizeof(str) - 1, &shard_id);
+    cout << "shard_id=" << shard_id << " s.shard_id=" << s.shard_id << endl;
+    string2ll(str, sizeof(str) - 1, (&s.shard_id));
+    cout << s.shard_id << endl;
+    s.shard_id = 5;
+    cout << s.shard_id << endl;
+}
+
+
+TEST(rand_test, 测试变量传递指针) {
+    long long int a = 1;
+    long long int *b = &a;
+    f1(b);
+    cout << "a=" << a << ",b=" << *b << endl;
+}
+
+int string2ll(const char *s, size_t slen, long long *value) {
+    const char *p = s;
+    size_t plen = 0;
+    int negative = 0;
+    unsigned long long v;
+
+    if (plen == slen)
+        return 0;
+
+    /* Special case: first and only digit is 0. */
+    if (slen == 1 && p[0] == '0') {
+        if (value != NULL) *value = 0;
+        return 1;
+    }
+
+    if (p[0] == '-') {
+        negative = 1;
+        p++; plen++;
+
+        /* Abort on only a negative sign. */
+        if (plen == slen)
+            return 0;
+    }
+
+    /* First digit should be 1-9, otherwise the string should just be 0. */
+    if (p[0] >= '1' && p[0] <= '9') {
+        v = p[0]-'0';
+        p++; plen++;
+    } else if (p[0] == '0' && slen == 1) {
+        *value = 0;
+        return 1;
+    } else {
+        return 0;
+    }
+
+    while (plen < slen && p[0] >= '0' && p[0] <= '9') {
+        if (v > (ULLONG_MAX / 10)) /* Overflow. */
+            return 0;
+        v *= 10;
+
+        if (v > (ULLONG_MAX - (p[0]-'0'))) /* Overflow. */
+            return 0;
+        v += p[0]-'0';
+
+        p++; plen++;
+    }
+
+    /* Return if not all bytes were used. */
+    if (plen < slen)
+        return 0;
+
+    if (negative) {
+        if (v > ((unsigned long long)(-(LLONG_MIN+1))+1)) /* Overflow. */
+            return 0;
+        if (value != NULL) *value = -v;
+    } else {
+        if (v > LLONG_MAX) /* Overflow. */
+            return 0;
+        if (value != NULL) *value = v;
+    }
+    return 1;
+}
+
+
+
+TEST(rand_test, 测试随机数字冲突的概率) {
+    // 统计相同值出现的次数
+    std::unordered_map<int, int> countMap;
+
+    // 生成随机数并统计
+    for (int i = 0; i < 10000; ++i) {
+        int randomNum = rand();
+        ++countMap[randomNum];
+    }
+
+    // 输出相同值出现的次数
+    for (const auto& pair : countMap) {
+        if (pair.second > 1) {
+            std::cout << "随机数 " << pair.first << " 出现了 " << pair.second << " 次" << std::endl;
+        }
+    }
 }
 
 TEST(string_test, 字符串比较) {
