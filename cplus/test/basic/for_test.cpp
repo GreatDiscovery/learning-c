@@ -6,6 +6,8 @@
 #include <iostream>
 #include "vector"
 
+int global_var = 10;
+
 using namespace std;
 
 void basic_for() {
