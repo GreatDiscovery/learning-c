@@ -21,6 +21,7 @@ TEST(keyword_test, static关键词测试) {
     foo();  // 输出 3
 }
 
+//如果你在一个文件中声明了一个全局变量或函数，但是该变量或函数的定义实际上是在另一个文件中，你可以使用extern关键字来声明这个变量或函数，以便在当前文件中使用它。
 TEST(extern_test, extern关键词测试) {
     printf("global_var=%d\n", global_var);
     global_var++;
