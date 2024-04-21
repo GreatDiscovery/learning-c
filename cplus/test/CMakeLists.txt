@@ -1,13 +1,15 @@
 include(FetchContent)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+
 FetchContent_Declare(
         googletest
         # Specify the commit you depend on and update it regularly.
-        URL https://github.com/google/googletest/archive/refs/tags/release-1.8.1.zip
+        URL https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
 
+FetchContent_MakeAvailable(googletest)
 # 该参数用来开启或关闭编译器优化，优化一些函数返回的tmp对象
 #add_compile_options(-Wall -fno-elide-constructors)
 
