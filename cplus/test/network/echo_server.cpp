@@ -6,8 +6,17 @@
 #include "hello.h"
 #include "../io/file_test.h"
 #include <unistd.h>
+
+#ifndef __APPLE__
 #include <limits.h>
+#include <syslimits.h>
+#define OPEN_MAX 10240
+#define RLIM_INFINITY (((__uint64_t)1 << 63) - 1)
+#else
+#endif
+
 #include <poll.h>
+
 
 void sig_child(int signo);
 

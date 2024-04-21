@@ -3,6 +3,7 @@
 //
 
 #include "../basic.h"
+#include <pthread.h>
 
 using namespace std;
 
@@ -80,8 +81,12 @@ void *thread2(void *arg) {
 
 void *thread3(void *arg) {
     printf("thred start");
-    pthread_setname_np("test-1");
     pthread_t t = pthread_self();
+    #ifdef __APPLE__
+        pthread_setname_np("test-1");
+    #else
+        pthread_setname_np(t,"test-1");
+    #endif
     char *name = (char *) malloc(7 * sizeof(char));
     pthread_getname_np(t, name, 8);
     printf("thread name=%s\n", name);

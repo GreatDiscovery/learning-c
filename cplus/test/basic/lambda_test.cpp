@@ -3,6 +3,7 @@
 //
 
 // lambda： [捕获列表] (params) opt -> return_type { body; };
+#include <functional>
 #include "../basic.h"
 
 using namespace std;

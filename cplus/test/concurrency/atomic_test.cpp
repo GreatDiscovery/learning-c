@@ -3,6 +3,7 @@
 //
 
 #include <thread>
+#include <atomic>
 #include "../basic.h"
 
 std::atomic<int> atomicValue(0);
