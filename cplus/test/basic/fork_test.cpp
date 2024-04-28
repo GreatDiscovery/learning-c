@@ -54,32 +54,34 @@ TEST(fork_test, fork测试父子进程内存内容是否相同) {
  * 当父子进程都只读内存时，相安无事。当其中某个进程写内存时，CPU硬件检测到内存页是read-only的，于是触发页异常中断（page-fault），陷入kernel的一个中断例程。
  * 中断例程中，kernel就会 把触发的异常的页复制一份，于是父子进程各自持有独立的一份。
  */
- // this demo is so terrible
+// this demo is so terrible
 TEST(fork_test, copy_on_write) {
-    int fd;
-    char c[10];
-    char *child = "#>Child.....output\n";
-
-    fd = open("foobar.txt", O_RDWR | O_CREAT, 0666);
-    printf("fd:%d\n", fd);
-    write(fd, "foobar.txt", 7);
-    close(fd);
-
-    //父进程
-    fd = open("foobar.txt", O_RDONLY, 0);
-    fsync(fd);
-    printf("fd:%d\n", fd);
-    if (fork() == 0)//子进程
-    {
-        fd = 1;//stdout
-        write(fd, child, strlen(child) + 1);
-        fsync(fd);
-        exit(0);
+    char *info = "child";
+    if (fork() == 0) {
+        // 子进程
+        sleep(1);
+        printf("child=%s\n", info);
+        assert(!strcmp(info, "child"));
+        return;
     }
-    printf("fd:%d\n", fd);
-    read(fd, c, sizeof(c));
-    close(fd);
-    c[10] = '\0';
-    printf("c = %s\n", c);
-    exit(0);
+    // 父进程
+    info = "parent";
+    printf("parent=%s\n", info);
+    assert(!strcmp(info, "parent"));
+}
+
+TEST(fork_test, copy_on_write2) {
+    char *info = "child";
+    if (fork() == 0) {
+        // 子进程
+        sleep(1);
+        execl("/bin/ls", "ls", "-l", NULL);
+        // execl执行了另一个程序来替代当前程序，所以下面内容不会打印出来
+        printf("child=%s\n", info);
+        return;
+    }
+    // 父进程
+    info = "parent";
+    printf("parent=%s\n", info);
+    assert(!strcmp(info, "parent"));
 }
