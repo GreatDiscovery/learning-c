@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <limits.h>
 
-
+//Reserve storage for the data of the file associated with FD
 TEST(fallocate_test, 测试顺序写) {
 #ifndef __APPLE__
     const char *filename = "testfile.txt";
