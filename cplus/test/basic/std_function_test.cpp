@@ -77,3 +77,9 @@ TEST(recall_fun, case2) {
     int result = recall_func(a, a + 4, is_greater_than_10);
     cout << result << endl;
 }
+
+TEST(lambda_func, case3) {
+    std::function<int(int, int)> add = [this](int x, int y) -> int { int z = x + y; return z; };
+    int a = add(3, 5);
+    cout << a << endl;
+}
