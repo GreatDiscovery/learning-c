@@ -16,6 +16,12 @@ struct MyData {
 
 // https://blog.csdn.net/qq_39560854/article/details/137465481?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-137465481-blog-112754585.235^v43^pc_blog_bottom_relevance_base7&spm=1001.2101.3001.4242.1&utm_relevant_index=3
 TEST(move_test, move测试) {
+    MyData d1 = MyData("data");
+    MyData d2 = std::move(d1);
+    std::cout << "d1.data: " << d1.data << std::endl;// d1现在为空
+    std::cout << "d2.data: " << d2.data << std::endl;// d2拥有d1的内容
+
+
     std::vector<MyData> vec;
     vec.push_back(MyData("Hello"));
     std::vector<MyData> vec2 = std::move(vec);
