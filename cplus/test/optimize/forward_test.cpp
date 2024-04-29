@@ -8,12 +8,12 @@
 #include "../basic.h"
 
 template<typename T>
-void PrintT(T& t) {
+void PrintT(T &t) {
     std::cout << "left value" << std::endl;
 }
 
 template<typename T>
-void PrintT(T&& t) {
+void PrintT(T &&t) {
     std::cout << "right value" << std::endl;
 }
 
@@ -24,6 +24,7 @@ void TestForward(T &&v) {
     PrintT(std::move(v));
 }
 
+// 例子不是太好
 TEST(forward_test, 转发优化) {
     TestForward(1);
     std::cout << "==============================" << std::endl;
@@ -32,4 +33,39 @@ TEST(forward_test, 转发优化) {
     std::cout << "==============================" << std::endl;
     TestForward(std::forward<int>(x));
     std::cout << "==============================" << std::endl;
+}
+
+using namespace std;
+template<typename T>
+void func(T &&param) {
+    if (std::is_same<string, T>::value)
+        std::cout << "string" << std::endl;
+    else if (std::is_same<string &, T>::value)
+        std::cout << "string&" << std::endl;
+    else if (std::is_same<string &&, T>::value)
+        std::cout << "string&&" << std::endl;
+    else if (std::is_same<int, T>::value)
+        std::cout << "int" << std::endl;
+    else if (std::is_same<int &, T>::value)
+        std::cout << "int&" << std::endl;
+    else if (std::is_same<int &&, T>::value)
+        std::cout << "int&&" << std::endl;
+    else
+        std::cout << "unkown" << std::endl;
+}
+
+int getInt() {
+    return 10;
+}
+
+// 详解move和forward：https://blog.csdn.net/newchenxf/article/details/117995131
+//T& & -> T& （对左值引用的左值引用是左值引用）
+//T& && -> T& （对左值引用的右值引用是左值引用）
+//T&& & ->T& （对右值引用的左值引用是左值引用）
+//T&& && ->T&& （对右值引用的右值引用是右值引用）
+TEST(forward_test, 引用折叠) {
+    int x = 1;
+    func(1); // 传递参数是右值 T推导成了int, 所以是int&& param, 右值引用
+    func(x); // 传递参数是左值 T推导成了int&, 所以是int& && param, 折叠成 int&,左值引用
+    func(getInt());// 参数getInt是右值 T推导成了int, 所以是int&& param, 右值引用
 }
