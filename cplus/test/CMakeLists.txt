@@ -21,6 +21,7 @@ add_executable(
         basic/iterator_test.cpp basic/iterator_test.h basic/std_function_test.cpp basic/std_function_test2.cpp basic/std_bind.cpp network/hello_server.cpp network/hello_client.cpp network/hello.h io/file_test.cpp io/file_test.h network/shutdown_test.cpp basic/lambda_test.cpp basic.h basic/tuple_test.cpp network/echo_server.cpp network/echo_client.cpp optimize/right_reference.cpp basic/fork_test.cpp basic/string_test.cpp basic/copy_constructor_test.cpp basic/stdin_test.cpp signal/signal_test.cpp optimize/deep_copy.cpp basic/MyString.cpp optimize/forward_test.cpp io/lseek_test.cpp collection/emplace_back_test.cpp optimize/type_traits_test.cpp optimize/decltype_test.cpp optimize/template_test.cpp collection/tuple_test.cpp network/daemon_init.cpp network/unix_local_test.cpp network/get_ifi_info.cpp network/unpifi.h basic/std_low_bound.cpp collection/vector_test.cpp collection/vector_test.h basic/macro_test.cpp concurrency/thread_test.cpp concurrency/mutex_test.cpp concurrency/atomic_test.cpp network/convert.cpp network/mutli_thread_listening.cpp algorithm/top_k_test.cpp algorithm/top_max_k_test.cpp c/memory_test.cpp basic/rand_test.cpp collection/map_test.cpp basic/keyword_test.cpp class/class_test.cpp io/fallocate_test.cpp optimize/unique_ptr_test.cpp
         optimize/move_test.cpp
         algorithm/heap_test.cpp
+        algorithm/llstring_test.cpp
 )
 
 target_link_libraries(unit_tests
