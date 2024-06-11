@@ -22,6 +22,7 @@ add_executable(
         optimize/move_test.cpp
         algorithm/heap_test.cpp
         algorithm/llstring_test.cpp
+        c/char_test.cpp
 )
 
 target_link_libraries(unit_tests
