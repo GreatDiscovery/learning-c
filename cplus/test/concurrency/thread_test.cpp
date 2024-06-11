@@ -80,17 +80,21 @@ void *thread2(void *arg) {
 
 
 void *thread3(void *arg) {
-    printf("thred start");
+    printf("thread start\n");
     pthread_t t = pthread_self();
     #ifdef __APPLE__
         pthread_setname_np("test-1");
     #else
-        pthread_setname_np(t,"test-1");
+        int result = pthread_setname_np(t,"test-7");
+        if (result != 0) {
+            printf("Failed to get thread name: %s\n", strerror(result));
+            return nullptr;
+        }
     #endif
-    char *name = (char *) malloc(7 * sizeof(char));
-    pthread_getname_np(t, name, 8);
+    char name[16];
+    pthread_getname_np(t, name, sizeof(name));
     printf("thread name=%s\n", name);
-    free(name);
+    return nullptr;
 }
 
 
