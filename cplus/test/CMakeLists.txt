@@ -23,6 +23,7 @@ add_executable(
         algorithm/heap_test.cpp
         algorithm/llstring_test.cpp
         c/char_test.cpp
+        c/va_test.cpp
 )
 
 target_link_libraries(unit_tests
