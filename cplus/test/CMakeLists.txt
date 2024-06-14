@@ -24,6 +24,7 @@ add_executable(
         algorithm/llstring_test.cpp
         c/char_test.cpp
         c/va_test.cpp
+        network/socket_pari_test.cpp
 )
 
 target_link_libraries(unit_tests
