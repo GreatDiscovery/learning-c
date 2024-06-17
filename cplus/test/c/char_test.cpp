@@ -42,3 +42,17 @@ TEST(char_test, 避免字符串常量段的问题) {
 
     printf("Copy: %s\n", copy);
 }
+
+TEST(char_test, 多个字符串拼接) {
+    char str1[] = "Hello";
+    char str2[] = ", ";
+    char str3[] = "World!";
+    char str4[] = " How are you?";
+
+    char result[100];
+
+    // 使用 sprintf 拼接字符串
+    sprintf(result, "%s%s%s%s", str1, str2, str3, str4);
+
+    printf("%s\n", result);
+}
