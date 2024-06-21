@@ -56,3 +56,14 @@ TEST(char_test, 多个字符串拼接) {
 
     printf("%s\n", result);
 }
+
+TEST(char_test, 修改单个字符) {
+    char *str = strdup("oooohello world");
+    uint32_t a = 1;
+    char *p = str + 4;
+    printf("%s\n", p);
+    p[0] = 'w';
+    printf("%s\n", p);
+    p[0] = a + '0';
+    printf("%s\n", p);
+}
