@@ -25,6 +25,7 @@ add_executable(
         c/char_test.cpp
         c/va_test.cpp
         network/socket_pari_test.cpp
+        io/fcntl_test.cpp
 )
 
 target_link_libraries(unit_tests
