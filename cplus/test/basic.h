@@ -4,6 +4,7 @@
 
 #ifndef CPLUS_BASIC_H
 #define CPLUS_BASIC_H
+#define UNUSED(V) ((void) V)
 
 #include <iostream>
 #include <gtest/gtest.h>
