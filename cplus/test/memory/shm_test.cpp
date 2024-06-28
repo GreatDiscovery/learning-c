@@ -30,7 +30,7 @@ TEST(shm_test, 新建共享内存) {
         perror("shmat");
         exit(1);
     }
-    // 从标准输入读数据
+    // 从标准输入读数据，会阻塞
     // echo "hello world" > /proc/pid/fd/0
     fgets(shmaddr, 100, stdin);
     // 分离共享内存段
