@@ -27,6 +27,7 @@ add_executable(
         network/socket_pari_test.cpp
         io/fcntl_test.cpp
         concurrency/pipe_test.cpp
+        memory/shm_test.cpp
 )
 
 target_link_libraries(unit_tests
