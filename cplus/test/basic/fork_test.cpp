@@ -85,3 +85,57 @@ TEST(fork_test, copy_on_write2) {
     printf("parent=%s\n", info);
     assert(!strcmp(info, "parent"));
 }
+
+TEST(fork_test, 测试拷贝页表耗时) {
+    struct timeval start, end;
+    int i;
+    const int num_pages = 100000;
+    const int page_size = 4096;
+
+    // 分配内存
+    char *memory = (char *) malloc(num_pages * page_size);
+    if (memory == NULL) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    // 初始化内存
+    for (i = 0; i < num_pages * page_size; i += page_size) {
+        memory[i] = 'a';
+    }
+
+    // 获取fork开始时间
+    gettimeofday(&start, NULL);
+
+    // 创建子进程
+    pid_t pid = fork();
+
+    // 获取fork结束时间
+    gettimeofday(&end, NULL);
+
+    if (pid < 0) {
+        perror("fork");
+        free(memory);
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        // 子进程
+        printf("Child process: PID = %d\n", getpid());
+        free(memory);  // 释放内存
+        exit(EXIT_SUCCESS);
+    } else {
+        // 父进程
+        printf("Parent process: PID = %d\n", getpid());
+
+        // 计算fork耗时
+        long seconds = end.tv_sec - start.tv_sec;
+        long microseconds = end.tv_usec - start.tv_usec;
+        long elapsed = seconds * 1000000 + microseconds;
+
+        // 大约24ms
+        printf("Time taken for fork: %ld microseconds\n", elapsed);
+
+        // 等待子进程结束
+        wait(NULL);
+        free(memory);  // 释放内存
+    }
+}
