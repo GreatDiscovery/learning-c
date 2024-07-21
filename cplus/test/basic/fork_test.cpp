@@ -5,6 +5,7 @@
 #include "../basic.h"
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/mman.h>
 
 
 TEST(fort_test, fork测试) {
@@ -138,4 +139,32 @@ TEST(fork_test, 测试拷贝页表耗时) {
         wait(NULL);
         free(memory);  // 释放内存
     }
+}
+
+TEST(fork_test, malloc获取虚拟地址) {
+    int *ptr = (int *)malloc(sizeof(int) * 10);  // 分配10个整数的内存
+    if (ptr == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return;
+    }
+    printf("Virtual address of allocated memory: %p\n", (void *)ptr);
+    free(ptr);  // 释放分配的内存
+}
+
+TEST(fork_test, mmap获取虚拟地址) {
+    int fd = open("example.txt", O_RDONLY|O_CREAT);
+    if (fd == -1) {
+        perror("open");
+        return;
+    }
+    size_t length = 1024;
+    void *addr = mmap(NULL, length, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (addr == MAP_FAILED) {
+        perror("mmap");
+        close(fd);
+        return;
+    }
+    printf("Virtual address of mapped memory: %p\n", addr);
+    munmap(addr, length);
+    close(fd);
 }
