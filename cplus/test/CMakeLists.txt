@@ -29,6 +29,8 @@ add_executable(
         concurrency/pipe_test.cpp
         ipc/shm_test.cpp
         ipc/semaphore_test.cpp
+        framework/brpc_test.cpp
+        framework/brpc_test.h
 )
 
 target_link_libraries(unit_tests
