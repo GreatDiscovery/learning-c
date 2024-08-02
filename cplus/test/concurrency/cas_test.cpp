@@ -49,12 +49,6 @@ TEST(cas_test, 比较加锁和无锁之间性能差异) {
     thread_cas_cost();
 }
 
-TEST(case_test, 测试) {
-    int *a;
-    a = 0;
-    printf("end, a=%d\n", a);
-}
-
 void thread_mutex_cost() {
     time_t start, end;
     double elapsed;
