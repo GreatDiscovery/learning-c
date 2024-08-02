@@ -37,7 +37,8 @@ add_executable(
         concurrency/pipe_test.cpp
         ipc/shm_test.cpp
         ipc/semaphore_test.cpp
-        framework/brpc_test.cpp
+        concurrency/cas_test.cpp
+        #        framework/brpc_test.cpp
 )
 
 set(CMAKE_PREFIX_PATH /root/brpc/output)

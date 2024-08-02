@@ -67,6 +67,7 @@ void *thread1(void *arg) {
     }
     printf("Thread 1 is awake!\n");
     pthread_mutex_unlock(&mutex1);
+    return NULL;
 }
 
 void *thread2(void *arg) {
@@ -76,6 +77,7 @@ void *thread2(void *arg) {
     printf("Thread 2 signaled!\n");
     pthread_cond_signal(&cond);
     pthread_mutex_unlock(&mutex1);
+    return NULL;
 }
 
 
