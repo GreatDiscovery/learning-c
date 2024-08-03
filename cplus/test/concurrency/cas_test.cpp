@@ -4,12 +4,16 @@
 
 #include "../basic.h"
 #include <pthread.h>
+#include <semaphore.h>
 
 #define NUM_THREADS 10
 #define TOTAL 100000000
 
 #define ngx_atomic_cmp_set(lock, old, set)                                    \
     __sync_bool_compare_and_swap(lock, old, set)
+
+#define ngx_atomic_fetch_add(value, add)                                      \
+    __sync_fetch_and_add(value, add)
 
 // work for x86
 // #define ngx_cpu_pause()             __asm__ ("pause")
@@ -29,6 +33,8 @@ static inline void ngx_cpu_pause(void) {
 int shared_variable1 = 0;
 int shared_variable2 = 0;
 volatile unsigned long pid_lock;
+volatile unsigned long waitNum;
+sem_t sem1;
 
 pthread_mutex_t mutex2;
 
@@ -117,6 +123,10 @@ void thread_cas_cost() {
         }
     }
 
+    if (sem_init(&sem1, 1, 0) == -1) {
+        perror("sem_init() failed");
+        exit(EXIT_FAILURE);
+    }
     start = time(NULL);
     // 等待线程完成
     // 等待线程完成
@@ -152,6 +162,14 @@ void thread_lock() {
             }
         }
         // 3. semaphore获取锁
+        ngx_atomic_fetch_add(&waitNum, 1);
+        if (pid_lock == 0 && ngx_atomic_cmp_set(&pid_lock, 0, pthread_self())) {
+            return;
+        }
+        while (sem_wait(&sem1) == -1) {
+            perror("sem_wait() failed while waiting on shmtx");
+            break;
+        }
         // 4. 实在获取不到锁，等待
         sched_yield();
     }
@@ -160,6 +178,19 @@ void thread_lock() {
 void thread_unlock() {
     if (ngx_atomic_cmp_set(&pid_lock, pthread_self(), 0)) {
         // release semaphore
-//        ngx_shmtx_wakeup(mtx);
+        for (;;) {
+            if ((long) waitNum <= 0) {
+                return;
+            }
+
+            if (ngx_atomic_cmp_set(&waitNum, waitNum, waitNum - 1)) {
+                break;
+            }
+        }
+
+        if (sem_post(&sem1) == -1) {
+            perror("sem_post() failed while wake shmtx");
+        }
+
     }
 }
