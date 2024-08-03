@@ -38,6 +38,7 @@ add_executable(
         ipc/shm_test.cpp
         ipc/semaphore_test.cpp
         concurrency/cas_test.cpp
+        concurrency/semaphore.cpp
         #        framework/brpc_test.cpp
 )
 
