@@ -39,6 +39,8 @@ add_executable(
         ipc/semaphore_test.cpp
         concurrency/cas_test.cpp
         concurrency/semaphore.cpp
+        concurrency/leak_bucket_test.cpp
+        basic/time_test.cpp
         #        framework/brpc_test.cpp
 )
 
