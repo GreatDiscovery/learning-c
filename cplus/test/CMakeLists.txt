@@ -90,7 +90,6 @@ target_link_libraries(unit_tests
         PRIVATE
         example
         gtest_main
-        ${BRPC_LIB} ${DYNAMIC_LIB}
         )
 
 # automatic discovery of unit tests
