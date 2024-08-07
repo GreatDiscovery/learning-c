@@ -15,7 +15,12 @@ long long ustime(void) {
     return ust;
 }
 
+long long mstime() {
+    return ustime() / 1000;
+}
+
 TEST(time_test, 获取当前ms时间戳) {
-    long long us = ustime();
-    printf("current us=%lld\n", us);
+    printf("current us=%lld\n", ustime());
+    printf("current ms=%lld\n", mstime());
+    printf("current s=%lld\n", (long long)time(NULL));
 }
