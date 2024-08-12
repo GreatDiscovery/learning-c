@@ -41,7 +41,9 @@ add_executable(
         concurrency/semaphore.cpp
         concurrency/leak_bucket_test.cpp
         basic/time_test.cpp
-        #        framework/brpc_test.cpp
+#        framework/brpc/hello_service.cpp
+        framework/brpc_test.cpp
+        framework/echo.pb.cc
 )
 
 set(CMAKE_PREFIX_PATH /root/brpc/output)
@@ -90,7 +92,8 @@ target_link_libraries(unit_tests
         PRIVATE
         example
         gtest_main
-        )
+        ${BRPC_LIB} ${DYNAMIC_LIB}
+)
 
 # automatic discovery of unit tests
 include(GoogleTest)

@@ -82,7 +82,7 @@ namespace example {
 
 TEST(brpc_test, 测试server) {
     // Parse gflags. We recommend you to use gflags as well.
-    GFLAGS_NS::ParseCommandLineFlags(&argc, &argv, true);
+//    GFLAGS_NS::ParseCommandLineFlags(&argc, &argv, true);
 
     // Generally you only need one Server.
     brpc::Server server;
@@ -131,7 +131,7 @@ DEFINE_int32(interval_ms, 1000, "Milliseconds between consecutive requests");
 
 TEST(brpc_test, 测试client) {
     // Parse gflags. We recommend you to use gflags as well.
-    GFLAGS_NS::ParseCommandLineFlags(&argc, &argv, true);
+//    GFLAGS_NS::ParseCommandLineFlags(&argc, &argv, true);
 
     // A Channel represents a communication line to a Server. Notice that
     // Channel is thread-safe and can be shared by all threads in your program.
