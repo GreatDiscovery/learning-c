@@ -44,6 +44,7 @@ add_executable(
 #        framework/brpc/hello_service.cpp
         framework/brpc_test.cpp
         framework/echo.pb.cc
+        framework/execution_queue_test.cpp
 )
 
 set(CMAKE_PREFIX_PATH /root/brpc/output)
