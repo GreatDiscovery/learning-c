@@ -45,6 +45,7 @@ add_executable(
         framework/brpc_test.cpp
         framework/echo.pb.cc
         framework/execution_queue_test.cpp
+        basic/exception_test.cpp
 )
 
 set(CMAKE_PREFIX_PATH /root/brpc/output)
