@@ -24,6 +24,7 @@ TEST(tuple_test, 熟悉tuple的用法) {
     double gpa1;
     char grade1;
     std::string name1;
+//    如果函数返回多个值（通常用std::tuple或std::pair），std::tie可以将这些值分配给单独的变量。
     std::tie(gpa1, grade1, name1) = get_student(1);
     std::cout << "ID: 1, "
               << "GPA: " << gpa1 << ", "
