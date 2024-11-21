@@ -15,8 +15,9 @@ struct server {
 
 int string2ll(const char *s, size_t slen, long long *value);
 
-void f1(long long int* l1);
-void f1(long long int* l1) {
+void f1(long long int *l1);
+
+void f1(long long int *l1) {
     *l1 = 5;
 }
 
@@ -59,7 +60,8 @@ int string2ll(const char *s, size_t slen, long long *value) {
 
     if (p[0] == '-') {
         negative = 1;
-        p++; plen++;
+        p++;
+        plen++;
 
         /* Abort on only a negative sign. */
         if (plen == slen)
@@ -68,8 +70,9 @@ int string2ll(const char *s, size_t slen, long long *value) {
 
     /* First digit should be 1-9, otherwise the string should just be 0. */
     if (p[0] >= '1' && p[0] <= '9') {
-        v = p[0]-'0';
-        p++; plen++;
+        v = p[0] - '0';
+        p++;
+        plen++;
     } else if (p[0] == '0' && slen == 1) {
         *value = 0;
         return 1;
@@ -82,11 +85,12 @@ int string2ll(const char *s, size_t slen, long long *value) {
             return 0;
         v *= 10;
 
-        if (v > (ULLONG_MAX - (p[0]-'0'))) /* Overflow. */
+        if (v > (ULLONG_MAX - (p[0] - '0'))) /* Overflow. */
             return 0;
-        v += p[0]-'0';
+        v += p[0] - '0';
 
-        p++; plen++;
+        p++;
+        plen++;
     }
 
     /* Return if not all bytes were used. */
@@ -94,7 +98,7 @@ int string2ll(const char *s, size_t slen, long long *value) {
         return 0;
 
     if (negative) {
-        if (v > ((unsigned long long)(-(LLONG_MIN+1))+1)) /* Overflow. */
+        if (v > ((unsigned long long) (-(LLONG_MIN + 1)) + 1)) /* Overflow. */
             return 0;
         if (value != NULL) *value = -v;
     } else {
@@ -104,7 +108,6 @@ int string2ll(const char *s, size_t slen, long long *value) {
     }
     return 1;
 }
-
 
 
 TEST(rand_test, 测试随机数字冲突的概率) {
@@ -118,7 +121,7 @@ TEST(rand_test, 测试随机数字冲突的概率) {
     }
 
     // 输出相同值出现的次数
-    for (const auto& pair : countMap) {
+    for (const auto &pair: countMap) {
         if (pair.second > 1) {
             std::cout << "随机数 " << pair.first << " 出现了 " << pair.second << " 次" << std::endl;
         }
@@ -151,4 +154,106 @@ TEST(string_test, 字符串内存拷贝) {
 //    memmove((void *) s3, (void *)s4, 7);
     cout << "s4=" << s4 << endl;
 
+}
+
+TEST(string_test, resize用来追加或者缩减字符串) {
+    using namespace std;
+    string str1("Hello world");
+    cout << "The original string str1 is: " << str1 << endl;
+
+    basic_string<char>::size_type sizeStr1;
+    sizeStr1 = str1.size();
+    basic_string<char>::size_type capStr1;
+    capStr1 = str1.capacity();
+
+    // Compare size & capacity of the original string
+    cout << "The current size of original string str1 is: "
+         << sizeStr1 << "." << endl;
+    cout << "The capacity of original string str1 is: "
+         << capStr1 << "." << endl << endl;
+
+    // Use resize to increase size by 2 elements: exclamations
+    str1.resize(str1.size() + 2, '!');
+    cout << "The resized string str1 is: " << str1 << endl;
+
+    sizeStr1 = str1.size();
+    capStr1 = str1.capacity();
+
+    // Compare size & capacity of a string after resizing
+    cout << "The current size of resized string str1 is: "
+         << sizeStr1 << "." << endl;
+    cout << "The capacity of resized string str1 is: "
+         << capStr1 << "." << endl << endl;
+
+    // Use resize to increase size by 20 elements:
+    str1.resize(str1.size() + 20);
+    cout << "The resized string str1 is: " << str1 << endl;
+
+    sizeStr1 = str1.size();
+    capStr1 = str1.capacity();
+
+    // Compare size & capacity of a string after resizing
+    // note capacity increases automatically as required
+    cout << "The current size of modified string str1 is: "
+         << sizeStr1 << "." << endl;
+    cout << "The capacity of modified string str1 is: "
+         << capStr1 << "." << endl << endl;
+
+    // Use resize to downsize by 28 elements:
+    str1.resize(str1.size() - 28);
+    cout << "The downsized string str1 is: " << str1 << endl;
+
+    sizeStr1 = str1.size();
+    capStr1 = str1.capacity();
+
+    // Compare size & capacity of a string after downsizing
+    cout << "The current size of downsized string str1 is: "
+         << sizeStr1 << "." << endl;
+    cout << "The capacity of downsized string str1 is: "
+         << capStr1 << "." << endl;
+}
+
+TEST(string_test, reserve缩小capacity保证足够容纳字符串) {
+    using namespace std;
+    string str1("Hello world");
+    cout << "The original string str1 is: " << str1 << endl;
+
+    basic_string<char>::size_type sizeStr1, sizerStr1;
+    sizeStr1 = str1.size();
+    basic_string<char>::size_type capStr1, caprStr1;
+    capStr1 = str1.capacity();
+
+    // Compare size & capacity of the original string
+    cout << "The current size of original string str1 is: "
+         << sizeStr1 << "." << endl;
+    cout << "The capacity of original string str1 is: "
+         << capStr1 << "." << endl << endl;
+
+    // Compare size & capacity of the string
+    // with added capacity
+    str1.reserve(40);
+    sizerStr1 = str1.size();
+    caprStr1 = str1.capacity();
+
+    cout << "The string str1with augmented capacity is: "
+         << str1 << endl;
+    cout << "The current size of string str1 is: "
+         << sizerStr1 << "." << endl;
+    cout << "The new capacity of string str1 is: "
+         << caprStr1 << "." << endl << endl;
+
+    // Compare size & capacity of the string
+    // with downsized capacity
+    str1.reserve();
+    basic_string<char>::size_type sizedStr1;
+    basic_string<char>::size_type capdStr1;
+    sizedStr1 = str1.size();
+    capdStr1 = str1.capacity();
+
+    cout << "The string str1 with downsized capacity is: "
+         << str1 << endl;
+    cout << "The current size of string str1 is: "
+         << sizedStr1 << "." << endl;
+    cout << "The reduced capacity of string str1 is: "
+         << capdStr1 << "." << endl << endl;
 }
