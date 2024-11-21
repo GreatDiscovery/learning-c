@@ -42,24 +42,24 @@ add_executable(
         concurrency/leak_bucket_test.cpp
         basic/time_test.cpp
 #        framework/brpc/hello_service.cpp
-        framework/brpc_test.cpp
-        framework/echo.pb.cc
-        framework/execution_queue_test.cpp
+#        framework/brpc_test.cpp
+#        framework/echo.pb.cc
+#        framework/execution_queue_test.cpp
         basic/exception_test.cpp
         basic/smart_pointer_test.cpp
 )
 
-set(CMAKE_PREFIX_PATH /root/brpc/output)
-# 查找 brpc 库和头文件，需要手动安装
-find_path(BRPC_INCLUDE_PATH NAMES brpc/server.h)
-find_library(BRPC_LIB NAMES libbrpc.a brpc)
-message("BRPC_INCLUDE_DIR=${BRPC_INCLUDE_PATH}")
-message("BRPC_LIB=${BRPC_LIB}")
-if((NOT BRPC_INCLUDE_PATH) OR (NOT BRPC_LIB))
-        message(FATAL_ERROR "Fail to find brpc")
-endif()
-# 设置 include 路径
-include_directories(${BRPC_INCLUDE_PATH})
+#set(CMAKE_PREFIX_PATH /root/brpc/output)
+## 查找 brpc 库和头文件，需要手动安装
+#find_path(BRPC_INCLUDE_PATH NAMES brpc/server.h)
+#find_library(BRPC_LIB NAMES libbrpc.a brpc)
+#message("BRPC_INCLUDE_DIR=${BRPC_INCLUDE_PATH}")
+#message("BRPC_LIB=${BRPC_LIB}")
+#if((NOT BRPC_INCLUDE_PATH) OR (NOT BRPC_LIB))
+#        message(FATAL_ERROR "Fail to find brpc")
+#endif()
+## 设置 include 路径
+#include_directories(${BRPC_INCLUDE_PATH})
 
 find_path(GFLAGS_INCLUDE_PATH gflags/gflags.h)
 find_library(GFLAGS_LIBRARY NAMES gflags libgflags)
@@ -95,7 +95,6 @@ target_link_libraries(unit_tests
         PRIVATE
         example
         gtest_main
-        ${BRPC_LIB} ${DYNAMIC_LIB}
 )
 
 # automatic discovery of unit tests

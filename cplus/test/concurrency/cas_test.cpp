@@ -146,6 +146,7 @@ void thread_cas_cost() {
 }
 
 void thread_lock() {
+#ifndef __APPLE__
     int n;
     for (;;) {
         // 1. 自旋获取锁
@@ -173,9 +174,11 @@ void thread_lock() {
         // 4. 实在获取不到锁，等待
         sched_yield();
     }
+#endif
 }
 
 void thread_unlock() {
+#ifndef __APPLE__
     if (ngx_atomic_cmp_set(&pid_lock, pthread_self(), 0)) {
         // release semaphore
         for (;;) {
@@ -193,4 +196,5 @@ void thread_unlock() {
         }
 
     }
+#endif
 }
