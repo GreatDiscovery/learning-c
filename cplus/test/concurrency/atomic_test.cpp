@@ -48,3 +48,22 @@ TEST(atomic_test, C语言的原子操作) {
     printf("a=%d\n", a);
     assert(a == 2000);
 }
+
+std::atomic<int> counter(0);
+
+void increment() {
+    for (int i = 0; i < 1000000; ++i) {
+        // 仅保证原子性，不提供线程间的同步或顺序保证,能保证修改顺序一致性
+        counter.fetch_add(1, std::memory_order_relaxed);
+    }
+}
+
+TEST(atomic_test, 测试memory_order) {
+    std::thread t1(increment);
+    std::thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Counter: " << counter.load(std::memory_order_relaxed) << std::endl;
+}
