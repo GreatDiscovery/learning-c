@@ -111,6 +111,7 @@ void thread4() {
     }
 }
 
+// memory_order_seq_cst主要区别在可见性，保证所有线程看到相同的内存操作顺序，强制顺序一致性，有额外同步开销
 TEST(atomic_test, 测试memory_order_seq_cst) {
     std::thread t1(thread1);
     std::thread t2(thread2);
@@ -123,7 +124,7 @@ TEST(atomic_test, 测试memory_order_seq_cst) {
 
     // 模拟准备工作
     std::thread t3(thread3);
-    std::thread t4(thread4); // 这里打印为啥老是flag3？
+    std::thread t4(thread4);
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
     startSignal2.release(2);
