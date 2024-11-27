@@ -76,6 +76,8 @@ std::atomic<bool> flag3(false);
 std::atomic<bool> flag4(false);
 
 std::binary_semaphore startSignal(0);
+std::binary_semaphore startSignal2(0);
+
 
 void thread1() {
     startSignal.acquire(); // 等待信号
@@ -94,7 +96,7 @@ void thread2() {
 }
 
 void thread3() {
-    startSignal.acquire(); // 等待信号
+    startSignal2.acquire(); // 等待信号
     flag3.store(true, std::memory_order_relaxed);
     if (flag4.load(std::memory_order_relaxed)) {
         std::cout << "Thread 3: flag4 is true" << std::endl;
@@ -102,7 +104,7 @@ void thread3() {
 }
 
 void thread4() {
-    startSignal.acquire(); // 等待信号
+    startSignal2.acquire(); // 等待信号
     flag4.store(true, std::memory_order_relaxed);
     if (flag3.load(std::memory_order_relaxed)) {
         std::cout << "Thread 4: flag3 is true" << std::endl;
@@ -120,10 +122,12 @@ TEST(atomic_test, 测试memory_order_seq_cst) {
     t2.join();
 
     // 模拟准备工作
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    startSignal.release(2); // 释放两个信号，允许两个线程同时运行
     std::thread t3(thread3);
-    std::thread t4(thread4);
+    std::thread t4(thread4); // 这里打印为啥老是flag3？
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    startSignal2.release(2);
+
     t3.join();
     t4.join();
 }
