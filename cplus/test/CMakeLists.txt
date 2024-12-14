@@ -47,6 +47,7 @@ add_executable(
 #        framework/execution_queue_test.cpp
         basic/exception_test.cpp
         basic/smart_pointer_test.cpp
+        c/endian_test.cpp
 )
 
 #set(CMAKE_PREFIX_PATH /root/brpc/output)
