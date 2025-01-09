@@ -5,6 +5,42 @@
 
 #include "../basic.h"
 #include <thread>
+#include <shared_mutex>
+
+
+std::shared_mutex mutex;
+int shared_data = 0;
+
+void reader(const int id) {
+    std::shared_lock lock(mutex); // 共享锁
+    std::cout << "Reader " << id << " reads shared_data: " << shared_data << "\n";
+}
+
+void writer(const int id) {
+    std::unique_lock lock(mutex); // 独占锁
+    ++shared_data;
+    std::cout << "Writer " << id << " modifies shared_data to: " << shared_data << "\n";
+}
+
+TEST(share_lock, 测试读写锁) {
+    std::vector<std::thread> threads;
+
+    // 启动多个读取线程
+    threads.reserve(10);
+    for (int i = 0; i < 5; ++i) {
+        threads.emplace_back(reader, i);
+    }
+
+    // 启动一个写入线程
+    for (int i = 0; i < 5; ++i) {
+        threads.emplace_back(writer, i);
+    }
+
+    // 等待所有线程完成
+    for (auto &t: threads) {
+        t.join();
+    }
+}
 
 std::mutex checking_mutex_;
 int total = 0;
@@ -49,4 +85,3 @@ struct foo *foo_alloc(int id) {
     }
     return fp;
 }
-
