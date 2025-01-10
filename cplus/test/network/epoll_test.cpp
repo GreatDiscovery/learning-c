@@ -14,7 +14,7 @@ void *read_thread(void *dummy) {
     uint64_t inc = 1;
     int ret = 0;
     int i = 0;
-    for (; i < 2; i++) {
+    for (; i < 10; i++) {
         ret = write(event_fd, &inc, sizeof(uint64_t));
         if (ret < 0) {
             perror("child thread write event_fd fail.");
@@ -22,7 +22,7 @@ void *read_thread(void *dummy) {
             printf("child thread completed write %llu (0x%llx) to event_fd\n", (unsigned long long) inc,
                    (unsigned long long) inc);
         }
-        sleep(4);
+        inc++;
     }
     return nullptr;
 }
@@ -42,6 +42,7 @@ TEST(epoll_test, epolllevent使用) {
     if (ret < 0) {
         perror("pthread create fail.");
     }
+    sleep(2);
 
     uint64_t counter;
     int epoll_fd = -1;
