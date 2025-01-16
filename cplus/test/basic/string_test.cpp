@@ -9,6 +9,29 @@
 
 using namespace std;
 
+void SplitString(const std::string &str, char delimiter, std::vector<std::string> &out);
+
+TEST(rand_test, 测试字符串分割) {
+    std::string s = "hello,world,hello,foo,bar";
+    std::vector<std::string> result;
+
+    // 分割字符串
+    SplitString(s, ',', result);
+
+    // 输出结果
+    for (const auto &part: result) {
+        std::cout << part << std::endl;
+    }
+}
+
+void SplitString(const std::string &str, char delimiter, std::vector<std::string> &out) {
+    std::stringstream ss(str);
+    std::string item;
+    while (std::getline(ss, item, delimiter)) {
+        out.push_back(item);
+    }
+}
+
 struct server {
     long long int shard_id;
 };
@@ -137,7 +160,6 @@ TEST(string_test, 字符串比较) {
 }
 
 TEST(string_test, 字符串内存拷贝) {
-
     // 下面使用的是字符串数组，属于是在堆里面开辟的一段数据，所以可以修改
     char s1[] = "hello, gavin!";
     char s2[] = "world";
@@ -151,9 +173,8 @@ TEST(string_test, 字符串内存拷贝) {
     const char *s3 = "hello!";
     const char *s4 = "world!";
     // error
-//    memmove((void *) s3, (void *)s4, 7);
+    //    memmove((void *) s3, (void *)s4, 7);
     cout << "s4=" << s4 << endl;
-
 }
 
 TEST(string_test, resize用来追加或者缩减字符串) {
@@ -168,9 +189,9 @@ TEST(string_test, resize用来追加或者缩减字符串) {
 
     // Compare size & capacity of the original string
     cout << "The current size of original string str1 is: "
-         << sizeStr1 << "." << endl;
+            << sizeStr1 << "." << endl;
     cout << "The capacity of original string str1 is: "
-         << capStr1 << "." << endl << endl;
+            << capStr1 << "." << endl << endl;
 
     // Use resize to increase size by 2 elements: exclamations
     str1.resize(str1.size() + 2, '!');
@@ -181,9 +202,9 @@ TEST(string_test, resize用来追加或者缩减字符串) {
 
     // Compare size & capacity of a string after resizing
     cout << "The current size of resized string str1 is: "
-         << sizeStr1 << "." << endl;
+            << sizeStr1 << "." << endl;
     cout << "The capacity of resized string str1 is: "
-         << capStr1 << "." << endl << endl;
+            << capStr1 << "." << endl << endl;
 
     // Use resize to increase size by 20 elements:
     str1.resize(str1.size() + 20);
@@ -195,9 +216,9 @@ TEST(string_test, resize用来追加或者缩减字符串) {
     // Compare size & capacity of a string after resizing
     // note capacity increases automatically as required
     cout << "The current size of modified string str1 is: "
-         << sizeStr1 << "." << endl;
+            << sizeStr1 << "." << endl;
     cout << "The capacity of modified string str1 is: "
-         << capStr1 << "." << endl << endl;
+            << capStr1 << "." << endl << endl;
 
     // Use resize to downsize by 28 elements:
     str1.resize(str1.size() - 28);
@@ -208,9 +229,9 @@ TEST(string_test, resize用来追加或者缩减字符串) {
 
     // Compare size & capacity of a string after downsizing
     cout << "The current size of downsized string str1 is: "
-         << sizeStr1 << "." << endl;
+            << sizeStr1 << "." << endl;
     cout << "The capacity of downsized string str1 is: "
-         << capStr1 << "." << endl;
+            << capStr1 << "." << endl;
 }
 
 TEST(string_test, reserve缩小capacity保证足够容纳字符串) {
@@ -225,9 +246,9 @@ TEST(string_test, reserve缩小capacity保证足够容纳字符串) {
 
     // Compare size & capacity of the original string
     cout << "The current size of original string str1 is: "
-         << sizeStr1 << "." << endl;
+            << sizeStr1 << "." << endl;
     cout << "The capacity of original string str1 is: "
-         << capStr1 << "." << endl << endl;
+            << capStr1 << "." << endl << endl;
 
     // Compare size & capacity of the string
     // with added capacity
@@ -236,11 +257,11 @@ TEST(string_test, reserve缩小capacity保证足够容纳字符串) {
     caprStr1 = str1.capacity();
 
     cout << "The string str1with augmented capacity is: "
-         << str1 << endl;
+            << str1 << endl;
     cout << "The current size of string str1 is: "
-         << sizerStr1 << "." << endl;
+            << sizerStr1 << "." << endl;
     cout << "The new capacity of string str1 is: "
-         << caprStr1 << "." << endl << endl;
+            << caprStr1 << "." << endl << endl;
 
     // Compare size & capacity of the string
     // with downsized capacity
@@ -251,9 +272,9 @@ TEST(string_test, reserve缩小capacity保证足够容纳字符串) {
     capdStr1 = str1.capacity();
 
     cout << "The string str1 with downsized capacity is: "
-         << str1 << endl;
+            << str1 << endl;
     cout << "The current size of string str1 is: "
-         << sizedStr1 << "." << endl;
+            << sizedStr1 << "." << endl;
     cout << "The reduced capacity of string str1 is: "
-         << capdStr1 << "." << endl << endl;
+            << capdStr1 << "." << endl << endl;
 }
