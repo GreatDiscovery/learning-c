@@ -9,7 +9,8 @@ class MyClass {
 public:
     explicit MyClass(int x) : value(x) {}
 
-    int getValue() const { return value; }
+    // const 方法：不能修改成员变量
+    int getValue() const;
 
 private:
     int value;
@@ -19,6 +20,9 @@ void printValue(const MyClass &obj) {
     std::cout << "Value: " << obj.getValue() << std::endl;
 }
 
+int MyClass::getValue() const {
+    return value;
+}
 
 TEST(MyClass, explicit_test) {
     // explicit 是一个关键字，用于声明单参数构造函数为显式构造函数，这意味着该构造函数不会自动进行隐式类型转换。
