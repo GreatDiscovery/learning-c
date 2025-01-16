@@ -15,6 +15,8 @@ TEST(rand_test, 测试字符串前缀开头) {
     std:string s = "hello world";
     assert(s.find("hello") == 0);
     assert(s.find("world") == 6);
+    // 找不到
+    assert(s.find("abc") == string::npos);
 }
 
 TEST(rand_test, 测试字符串分割) {
