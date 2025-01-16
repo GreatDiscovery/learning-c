@@ -11,8 +11,14 @@ using namespace std;
 
 void SplitString(const std::string &str, char delimiter, std::vector<std::string> &out);
 
+TEST(rand_test, 测试字符串前缀开头) {
+    std:string s = "hello world";
+    assert(s.find("hello") == 0);
+    assert(s.find("world") == 6);
+}
+
 TEST(rand_test, 测试字符串分割) {
-    std::string s = "hello,world,hello,foo,bar";
+    std::string s = "hello,world";
     std::vector<std::string> result;
 
     // 分割字符串
@@ -22,6 +28,7 @@ TEST(rand_test, 测试字符串分割) {
     for (const auto &part: result) {
         std::cout << part << std::endl;
     }
+    assert(result.size() == 2);
 }
 
 void SplitString(const std::string &str, char delimiter, std::vector<std::string> &out) {
