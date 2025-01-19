@@ -50,6 +50,7 @@ add_executable(
         c/endian_test.cpp
         network/iovec_test.cpp
         network/epoll_test.cpp
+        collection/arr_test.cpp
 )
 
 #set(CMAKE_PREFIX_PATH /root/brpc/output)
