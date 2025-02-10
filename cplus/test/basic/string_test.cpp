@@ -31,6 +31,14 @@ TEST(rand_test, 测试字符串分割) {
         std::cout << part << std::endl;
     }
     assert(result.size() == 2);
+
+    std::string s2 = "k1=v1";
+    std::stringstream key_value(s2);
+    std::string key;
+    std::string value;
+    if (std::getline(key_value, key, '=') && std::getline(key_value, value)) {
+        std::cout << "key=" << key << " value=" << value << std::endl;
+    }
 }
 
 void SplitString(const std::string &str, char delimiter, std::vector<std::string> &out) {
