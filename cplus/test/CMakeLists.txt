@@ -40,6 +40,7 @@ add_executable(
         concurrency/cas_test.cpp
         concurrency/semaphore.cpp
         concurrency/leak_bucket_test.cpp
+        concurrency/shared_ptr_test.cpp
         basic/time_test.cpp
 #        framework/brpc/hello_service.cpp
 #        framework/brpc_test.cpp
