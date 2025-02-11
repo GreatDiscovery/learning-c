@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <thread>
+#include <atomic>
 #include "gtest/gtest.h"
 
 class Person1 {
@@ -24,9 +25,25 @@ public:
     }
 };
 
+// Trivially Copyable 类型，不涉及复杂的构造、析构或虚函数
+class Person2 {
+public:
+    int age;
+
+    Person2(int a) : age(a) {
+    }
+    ~Person2() = default;
+};
+
 
 // 创建一个 std::shared_ptr<Person>，引用计数为 1
 std::shared_ptr<Person1> global_v = std::make_shared<Person1>("Alice");
+// std::atomic<std::shared_ptr<Person1>> global_automic_data;
+
+std::shared_ptr<Person1> getGlobalV() {
+    return global_v;
+}
+
 
 void localCount(const int id) {
     std::shared_ptr<Person1> local_ptr = global_v;
@@ -50,6 +67,22 @@ void localCount3(const int id) {
     for (int i = 0; i < 20; ++i) {
         local_ptr->sayHello();
         std::cout << "thread " <<  id << " reference count after inner scope: " << local_ptr.use_count() << '\n';
+        sleep(1);
+    }
+}
+
+// void localCount4(const int id) {
+//     for (int i = 0; i < 20; ++i) {
+//         global_automic_data.load()->sayHello();
+//         std::cout << "thread " <<  id << " reference count after inner scope: " << global_automic_data.load().use_count() << '\n';
+//         sleep(1);
+//     }
+// }
+
+void localCount5(const int id) {
+    for (int i = 0; i < 20; ++i) {
+        getGlobalV()->sayHello();
+        std::cout << "thread " <<  id << " reference count after inner scope: " << getGlobalV().use_count() << '\n';
         sleep(1);
     }
 }
@@ -86,7 +119,7 @@ TEST(smart_pointer_test, 测试主线程reset智能指针对其余线程的影�
     t2.join();
 }
 
-// 只有在线程中拷贝一个智能指针的副本，才能增加引用
+// 只有在线程中拷贝一个智能指针的副本，才能增加引用。这种不增加引用个数，只判断对象是否活着的引用是weak_ptr
 TEST(smart_pointer_test, 测试多线程访问同一个全局变量不会增加引用) {
 
     global_v->sayHello();
@@ -132,3 +165,72 @@ TEST(smart_pointer_test, case1) {
 }
 
 
+// Trivially Copyable 类型，不涉及复杂的构造、析构或虚函数。智能指针涉及复杂的析构函数，编译时会报错
+// TEST(smart_pointer_test, 多线程安全析构使用方式) {
+//
+//     global_automic_data.store(std::make_shared<Person1>("jiayun"));
+//
+//     global_automic_data.load()->sayHello();
+//
+//     std::vector<std::thread> threads;
+//
+//     // 启动多个读取线程
+//     threads.reserve(10);
+//     for (int i = 0; i < 5; ++i) {
+//         threads.emplace_back(localCount4, i);
+//     }
+//
+//     // 等待所有线程完成
+//     for (auto &t: threads) {
+//         t.join();
+//     }
+//
+//     std::cout << "main thread Reference count after inner scope: " << global_automic_data.load().use_count() << '\n';
+// }
+
+class MyClass {
+public:
+    int data;
+
+    MyClass(int val) : data(val) {}
+};
+
+TEST(smart_pointer_test, atomic测试) {
+    std::atomic<MyClass> atomic_obj(MyClass(42));  // OK
+
+    // Accessing atomic value (dangerous without proper synchronization, just for illustration)
+    std::cout << atomic_obj.load().data << std::endl;
+
+    std::atomic<Person2> a(Person2(1));
+    std::cout << a.load().age << std::endl;
+    // 编译报错
+    // std::atomic<std::shared_ptr<Person2>> b(std::make_shared<Person2>(2));
+    // std::cout << b.load().get()->age << std::endl;
+}
+
+TEST(smart_pointer_test, 测试函数是否也会拷贝一份智能指针的副本) {
+
+    getGlobalV()->sayHello();
+
+    std::vector<std::thread> threads;
+
+    // 启动多个读取线程
+    threads.reserve(10);
+    for (int i = 0; i < 5; ++i) {
+        threads.emplace_back(localCount5, i);
+    }
+
+    std::cout << "start reset" << std::endl;
+    std::shared_ptr<Person1> old_ptr = global_v;
+    global_v = std::make_shared<Person1>("Bob");
+    old_ptr.reset();
+
+    std::cout << "end reset" << std::endl;
+
+    // 等待所有线程完成
+    for (auto &t: threads) {
+        t.join();
+    }
+
+    std::cout << "main thread Reference count after inner scope: " << global_v.use_count() << '\n';
+}

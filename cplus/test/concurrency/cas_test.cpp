@@ -21,7 +21,9 @@
 
 static inline void ngx_cpu_pause(void) {
     // arm architecture
+#ifdef __APPLE__
     __asm__ __volatile__("wfe");
+#endif
 }
 
 /**
