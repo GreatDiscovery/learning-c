@@ -40,6 +40,7 @@ add_executable(
         concurrency/cas_test.cpp
         concurrency/semaphore.cpp
         concurrency/leak_bucket_test.cpp
+        concurrency/shared_ptr_test.cpp
         basic/time_test.cpp
 #        framework/brpc/hello_service.cpp
 #        framework/brpc_test.cpp
@@ -48,6 +49,9 @@ add_executable(
         basic/exception_test.cpp
         basic/smart_pointer_test.cpp
         c/endian_test.cpp
+        network/iovec_test.cpp
+        network/epoll_test.cpp
+        collection/arr_test.cpp
 )
 
 #set(CMAKE_PREFIX_PATH /root/brpc/output)

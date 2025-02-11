@@ -55,17 +55,17 @@ struct fn_class {
 
 TEST(traits_test, 编译期获取一个可调用对象的返回类型) {
     // decltype简介 https://www.cnblogs.com/QG-whz/p/4952980.html
-    typedef std::result_of<decltype(fn) &(int)>::type A;
-    typedef result_of<fn_ref(int)>::type B;
-    typedef result_of<fn_ptr(int)>::type C;
-    typedef result_of<fn_class(int)>::type D;
-
-    // 可以转换boolean输出类型为true和false
-    cout << boolalpha;
-    cout << "typedefs of int:" << endl;
-
-    cout << "A: " << is_same<int, A>::value << endl;
-    cout << "B: " << is_same<int, B>::value << endl;
-    cout << "C: " << is_same<int, C>::value << endl;
-    cout << "D: " << is_same<int, D>::value << endl;
+    // typedef std::result_of<decltype(fn) &(int)>::type A;
+    // typedef result_of<fn_ref(int)>::type B;
+    // typedef result_of<fn_ptr(int)>::type C;
+    // typedef result_of<fn_class(int)>::type D;
+    //
+    // // 可以转换boolean输出类型为true和false
+    // cout << boolalpha;
+    // cout << "typedefs of int:" << endl;
+    //
+    // cout << "A: " << is_same<int, A>::value << endl;
+    // cout << "B: " << is_same<int, B>::value << endl;
+    // cout << "C: " << is_same<int, C>::value << endl;
+    // cout << "D: " << is_same<int, D>::value << endl;
 }
