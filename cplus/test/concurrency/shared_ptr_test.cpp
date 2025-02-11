@@ -8,6 +8,7 @@
 #include <memory>
 
 // std::enable_shared_from_this<T> 允许一个对象安全地创建指向自身的 std::shared_ptr，避免多次 shared_ptr 绑定同一对象，导致内存管理问题。
+// 用来在对象内部创建this指针，类内（GetSharedObject函数内部）要创建一个智能指针传给其它对象：https://zhuanlan.zhihu.com/p/393571228
 
 class Person3 : public std::enable_shared_from_this<Person3> {
 public:
