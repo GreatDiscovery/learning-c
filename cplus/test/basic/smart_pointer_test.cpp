@@ -39,6 +39,8 @@ TEST(smart_pointer_test, case1) {
 
     std::cout << "Reference count after inner scope: " << p1.use_count() << '\n';
 
+    p1.reset(); // 不再使用智能指针 或者p1 = nullptr，释放当前对象的所有权
+    sleep(1);
     // 离开 main() 函数，p1 销毁，引用计数变为 0，Person 对象被自动释放
     return;
 }
