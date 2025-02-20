@@ -52,6 +52,7 @@ add_executable(
         network/iovec_test.cpp
         network/epoll_test.cpp
         collection/arr_test.cpp
+        concurrency/Observer.cpp
 )
 
 #set(CMAKE_PREFIX_PATH /root/brpc/output)
