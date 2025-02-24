@@ -27,3 +27,12 @@ TEST(extern_test, extern关键词测试) {
     global_var++;
     printf("global_var=%d\n", global_var);
 }
+
+void bar() noexcept {
+    printf("noexcept 不抛出异常，帮助编译器优化\n");
+    printf("如果抛出异常，则会调用std::terminate()退出程序\n");
+}
+
+TEST(keyword_test, noexcept测试) {
+    bar();
+}
