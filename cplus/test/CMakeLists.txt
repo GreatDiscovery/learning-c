@@ -53,6 +53,7 @@ add_executable(
         network/epoll_test.cpp
         collection/arr_test.cpp
         concurrency/Observer.cpp
+        concurrency/memory_order_test.cpp
 )
 
 #set(CMAKE_PREFIX_PATH /root/brpc/output)
