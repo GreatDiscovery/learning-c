@@ -54,6 +54,7 @@ add_executable(
         collection/arr_test.cpp
         concurrency/Observer.cpp
         concurrency/memory_order_test.cpp
+        framework/bthread_test.cpp
 )
 
 #set(CMAKE_PREFIX_PATH /root/brpc/output)
